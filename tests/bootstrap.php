@@ -14,7 +14,7 @@ ini_set('display_errors', '1');
 //Composer
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-\Cycle\Migrations\Tests\BaseTest::$config = [
+\Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
     'debug'     => false,
     'strict'    => true,
     'benchmark' => false,
@@ -46,7 +46,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => 'postgres'
     ],
     'sqlserver' => [
-        'driver' => \Spiral\Database\Driver\SQLServer\SQLServerDriver::class,
+        'driver' => \Cycle\Database\Driver\SQLServer\SQLServerDriver::class,
         'check'  => function () {
             return !in_array('sqlsrv', \PDO::getAvailableDrivers());
         },
@@ -59,7 +59,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 if (!empty(getenv('DB'))) {
     switch (getenv('DB')) {
         case 'postgres':
-            \Cycle\Migrations\Tests\BaseTest::$config = [
+            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug'    => false,
                 'postgres' => [
                     'driver' => \Spiral\Database\Driver\Postgres\PostgresDriver::class,
@@ -74,7 +74,7 @@ if (!empty(getenv('DB'))) {
             break;
 
         case 'mariadb':
-            \Cycle\Migrations\Tests\BaseTest::$config = [
+            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug' => false,
                 'mysql' => [
                     'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,

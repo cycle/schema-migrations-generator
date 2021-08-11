@@ -9,13 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests;
 
 use Cycle\Annotated\Entities;
 use Cycle\Annotated\Generator;
 use Cycle\Annotated\MergeColumns;
 use Cycle\Annotated\MergeIndexes;
-use Cycle\Migrations\GenerateMigrations;
+use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\ORM\Config\RelationConfig;
 use Cycle\ORM\Factory;
 use Cycle\ORM\ORM;
@@ -38,9 +38,9 @@ use Spiral\Database\Driver\Handler;
 use Spiral\Database\Schema\AbstractTable;
 use Spiral\Database\Schema\Comparator;
 use Spiral\Files\Files;
-use Spiral\Migrations\Config\MigrationConfig;
-use Spiral\Migrations\FileRepository;
-use Spiral\Migrations\Migrator;
+use Cycle\Migrations\Config\MigrationConfig;
+use Cycle\Migrations\FileRepository;
+use Cycle\Migrations\Migrator;
 use Spiral\Tokenizer\ClassesInterface;
 use Spiral\Tokenizer\Config\TokenizerConfig;
 use Spiral\Tokenizer\Tokenizer;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Cycle\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests;
 
-use Cycle\Migrations\MigrationImage;
+use Cycle\Schema\Generator\Migrations\MigrationImage;
 use PHPUnit\Framework\TestCase;
-use Spiral\Migrations\Config\MigrationConfig;
+use Cycle\Migrations\Config\MigrationConfig;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
 

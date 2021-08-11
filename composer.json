@@ -1,5 +1,5 @@
 {
-  "name": "cycle/migrations",
+  "name": "cycle/schema-migrations-generator",
   "type": "library",
   "license": "MIT",
   "description": "Cycle ORM Migration generation",
@@ -7,7 +7,7 @@
     "php": ">=7.2",
     "cycle/orm": "^1.0",
     "cycle/schema-builder": "^1.0",
-    "spiral/migrations": "^2.0"
+    "cycle/migrations": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~8.0",
@@ -17,12 +17,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Cycle\\Migrations\\": "src/"
+      "Cycle\\Schema\\Generator\\Migrations\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Cycle\\Migrations\\Tests\\": "tests/Migrations/"
+      "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
     }
   }
 }
