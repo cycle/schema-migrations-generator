@@ -9,16 +9,16 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations;
+namespace Cycle\Schema\Generator\Migrations;
 
 use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\GeneratorInterface;
 use Cycle\Schema\Registry;
-use Spiral\Database\Schema\AbstractTable;
-use Spiral\Migrations\Atomizer\Atomizer;
-use Spiral\Migrations\Atomizer\Renderer;
-use Spiral\Migrations\Config\MigrationConfig;
-use Spiral\Migrations\RepositoryInterface;
+use Cycle\Database\Schema\AbstractTable;
+use Cycle\Migrations\Atomizer\Atomizer;
+use Cycle\Migrations\Atomizer\Renderer;
+use Cycle\Migrations\Config\MigrationConfig;
+use Cycle\Migrations\RepositoryInterface;
 
 /**
  * Migration generator creates set of migrations needed to sync database schema with desired state. Each database will

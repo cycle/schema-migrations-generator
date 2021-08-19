@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests;
 
 abstract class ReflectTest extends BaseTest
 {

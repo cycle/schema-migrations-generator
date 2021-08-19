@@ -9,9 +9,9 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations\Tests\Driver\SQLServer;
+namespace Cycle\Schema\Generator\Migrations\Tests\Driver\SQLServer;
 
-class ReflectTest extends \Cycle\Migrations\Tests\ReflectTest
+class ReflectTest extends \Cycle\Schema\Generator\Migrations\Tests\ReflectTest
 {
     public const DRIVER = 'sqlserver';
 }

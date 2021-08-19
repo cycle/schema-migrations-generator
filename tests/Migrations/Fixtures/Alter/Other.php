@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations\Tests\Fixtures\Alter;
+namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Alter;
 
 /**
  * @entity(database=secondary)

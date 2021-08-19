@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Migrations;
+namespace Cycle\Schema\Generator\Migrations;
 
-use Spiral\Migrations\Config\MigrationConfig;
-use Spiral\Migrations\Migration;
+use Cycle\Migrations\Config\MigrationConfig;
+use Cycle\Migrations\Migration;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
 

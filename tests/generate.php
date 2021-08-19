@@ -24,29 +24,29 @@ $tokenizer = new Tokenizer\Tokenizer(new Tokenizer\Config\TokenizerConfig([
 
 $databases = [
     'sqlite'    => [
-        'namespace' => 'Cycle\Migrations\Tests\Driver\SQLite',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLite',
         'directory' => __DIR__ . '/Migrations/Driver/SQLite/'
     ],
     'mysql'     => [
-        'namespace' => 'Cycle\Migrations\Tests\Driver\MySQL',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\MySQL',
         'directory' => __DIR__ . '/Migrations/Driver/MySQL/'
     ],
     'postgres'  => [
-        'namespace' => 'Cycle\Migrations\Tests\Driver\Postgres',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\Postgres',
         'directory' => __DIR__ . '/Migrations/Driver/Postgres/'
     ],
     'sqlserver' => [
-        'namespace' => 'Cycle\Migrations\Tests\Driver\SQLServer',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLServer',
         'directory' => __DIR__ . '/Migrations/Driver/SQLServer/'
     ]
 ];
 
 echo "Generating test classes for all database types...\n";
 
-$classes = $tokenizer->classLocator()->getClasses(\Cycle\Migrations\Tests\BaseTest::class);
+$classes = $tokenizer->classLocator()->getClasses(\Cycle\Schema\Generator\Migrations\Tests\BaseTest::class);
 
 foreach ($classes as $class) {
-    if (!$class->isAbstract() || $class->getName() == \Cycle\Migrations\Tests\BaseTest::class) {
+    if (!$class->isAbstract() || $class->getName() == \Cycle\Schema\Generator\Migrations\Tests\BaseTest::class) {
         continue;
     }
 

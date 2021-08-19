@@ -14,12 +14,12 @@ ini_set('display_errors', '1');
 //Composer
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-\Cycle\Migrations\Tests\BaseTest::$config = [
+\Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
     'debug'     => false,
     'strict'    => true,
     'benchmark' => false,
     'sqlite'    => [
-        'driver' => \Spiral\Database\Driver\SQLite\SQLiteDriver::class,
+        'driver' => \Cycle\Database\Driver\SQLite\SQLiteDriver::class,
         'check'  => function () {
             return !in_array('sqlite', \PDO::getAvailableDrivers());
         },
@@ -28,7 +28,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => ''
     ],
     'mysql'     => [
-        'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,
+        'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
         'check'  => function () {
             return !in_array('mysql', \PDO::getAvailableDrivers());
         },
@@ -37,7 +37,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => 'root'
     ],
     'postgres'  => [
-        'driver' => \Spiral\Database\Driver\Postgres\PostgresDriver::class,
+        'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
         'check'  => function () {
             return !in_array('pgsql', \PDO::getAvailableDrivers());
         },
@@ -46,7 +46,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => 'postgres'
     ],
     'sqlserver' => [
-        'driver' => \Spiral\Database\Driver\SQLServer\SQLServerDriver::class,
+        'driver' => \Cycle\Database\Driver\SQLServer\SQLServerDriver::class,
         'check'  => function () {
             return !in_array('sqlsrv', \PDO::getAvailableDrivers());
         },
@@ -59,10 +59,10 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 if (!empty(getenv('DB'))) {
     switch (getenv('DB')) {
         case 'postgres':
-            \Cycle\Migrations\Tests\BaseTest::$config = [
+            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug'    => false,
                 'postgres' => [
-                    'driver' => \Spiral\Database\Driver\Postgres\PostgresDriver::class,
+                    'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
                     'check'  => function () {
                         return true;
                     },
@@ -74,10 +74,10 @@ if (!empty(getenv('DB'))) {
             break;
 
         case 'mariadb':
-            \Cycle\Migrations\Tests\BaseTest::$config = [
+            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug' => false,
                 'mysql' => [
-                    'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,
+                    'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
                     'check'  => function () {
                         return true;
                     },

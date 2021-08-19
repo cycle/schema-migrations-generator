@@ -5,24 +5,25 @@
   "description": "Cycle ORM Migration generation",
   "require": {
     "php": ">=7.2",
-    "cycle/orm": "^1.0",
-    "cycle/schema-builder": "^1.0",
-    "spiral/migrations": "^2.0"
+    "cycle/database": "^2.9",
+    "cycle/schema-builder": "2.0.x-dev",
+    "cycle/migrations": "2.0.x-dev"
   },
   "require-dev": {
+    "cycle/orm": "2.0.x-dev",
     "phpunit/phpunit": "~8.0",
-    "cycle/annotated": "^1.0",
+    "cycle/annotated": "2.0.x-dev",
     "spiral/debug": "^2.7",
     "spiral/code-style": "^1.0"
   },
   "autoload": {
     "psr-4": {
-      "Cycle\\Migrations\\": "src/"
+      "Cycle\\Schema\\Generator\\Migrations\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Cycle\\Migrations\\Tests\\": "tests/Migrations/"
+      "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
     }
   }
 }
