@@ -5,9 +5,9 @@
   "description": "Cycle ORM Migration generation",
   "require": {
     "php": ">=7.2",
-    "cycle/orm": "^1.0",
-    "cycle/schema-builder": "^1.0",
-    "cycle/migrations": "^2.0"
+    "cycle/orm": "2.0.x-dev",
+    "cycle/schema-builder": "2.0.x-dev",
+    "cycle/migrations": "2.0.x-dev"
   },
   "require-dev": {
     "phpunit/phpunit": "~8.0",
