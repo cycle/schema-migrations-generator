@@ -14,7 +14,7 @@ namespace Cycle\Schema\Generator\Migrations;
 use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\GeneratorInterface;
 use Cycle\Schema\Registry;
-use Spiral\Database\Schema\AbstractTable;
+use Cycle\Database\Schema\AbstractTable;
 use Cycle\Migrations\Atomizer\Atomizer;
 use Cycle\Migrations\Atomizer\Renderer;
 use Cycle\Migrations\Config\MigrationConfig;

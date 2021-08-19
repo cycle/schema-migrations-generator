@@ -19,7 +19,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
     'strict'    => true,
     'benchmark' => false,
     'sqlite'    => [
-        'driver' => \Spiral\Database\Driver\SQLite\SQLiteDriver::class,
+        'driver' => \Cycle\Database\Driver\SQLite\SQLiteDriver::class,
         'check'  => function () {
             return !in_array('sqlite', \PDO::getAvailableDrivers());
         },
@@ -28,7 +28,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => ''
     ],
     'mysql'     => [
-        'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,
+        'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
         'check'  => function () {
             return !in_array('mysql', \PDO::getAvailableDrivers());
         },
@@ -37,7 +37,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
         'pass'   => 'root'
     ],
     'postgres'  => [
-        'driver' => \Spiral\Database\Driver\Postgres\PostgresDriver::class,
+        'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
         'check'  => function () {
             return !in_array('pgsql', \PDO::getAvailableDrivers());
         },
@@ -62,7 +62,7 @@ if (!empty(getenv('DB'))) {
             \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug'    => false,
                 'postgres' => [
-                    'driver' => \Spiral\Database\Driver\Postgres\PostgresDriver::class,
+                    'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
                     'check'  => function () {
                         return true;
                     },
@@ -77,7 +77,7 @@ if (!empty(getenv('DB'))) {
             \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug' => false,
                 'mysql' => [
-                    'driver' => \Spiral\Database\Driver\MySQL\MySQLDriver::class,
+                    'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
                     'check'  => function () {
                         return true;
                     },
