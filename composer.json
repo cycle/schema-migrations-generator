@@ -1,5 +1,5 @@
 {
-  "name": "cycle/migrations",
+  "name": "cycle/schema-migrations-generator",
   "type": "library",
   "license": "MIT",
   "description": "Cycle ORM Migration generation",
