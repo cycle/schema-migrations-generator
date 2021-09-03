@@ -19,26 +19,26 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 $tokenizer = new Tokenizer\Tokenizer(new Tokenizer\Config\TokenizerConfig([
     'directories' => [__DIR__],
-    'exclude'     => []
+    'exclude' => [],
 ]));
 
 $databases = [
-    'sqlite'    => [
+    'sqlite' => [
         'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLite',
-        'directory' => __DIR__ . '/Migrations/Driver/SQLite/'
+        'directory' => __DIR__ . '/Migrations/Driver/SQLite/',
     ],
-    'mysql'     => [
+    'mysql' => [
         'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\MySQL',
-        'directory' => __DIR__ . '/Migrations/Driver/MySQL/'
+        'directory' => __DIR__ . '/Migrations/Driver/MySQL/',
     ],
-    'postgres'  => [
+    'postgres' => [
         'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\Postgres',
-        'directory' => __DIR__ . '/Migrations/Driver/Postgres/'
+        'directory' => __DIR__ . '/Migrations/Driver/Postgres/',
     ],
     'sqlserver' => [
         'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLServer',
-        'directory' => __DIR__ . '/Migrations/Driver/SQLServer/'
-    ]
+        'directory' => __DIR__ . '/Migrations/Driver/SQLServer/',
+    ],
 ];
 
 echo "Generating test classes for all database types...\n";

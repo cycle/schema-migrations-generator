@@ -51,6 +51,7 @@ class GenerateMigrations implements GeneratorInterface
 
     /**
      * @param Registry $registry
+     *
      * @return Registry
      */
     public function run(Registry $registry): Registry
@@ -80,6 +81,7 @@ class GenerateMigrations implements GeneratorInterface
     /**
      * @param string          $database
      * @param AbstractTable[] $tables
+     *
      * @return array [string, FileDeclaration]
      */
     protected function generate(string $database, array $tables): ?MigrationImage
@@ -110,6 +112,7 @@ class GenerateMigrations implements GeneratorInterface
 
     /**
      * @param Atomizer $atomizer
+     *
      * @return string
      */
     private function generateName(Atomizer $atomizer): string

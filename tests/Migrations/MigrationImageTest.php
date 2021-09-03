@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cycle\Schema\Generator\Migrations\Tests;
 
 use Cycle\Schema\Generator\Migrations\MigrationImage;
@@ -69,7 +71,7 @@ class MigrationImageTest extends TestCase
         $this->assertContains($class, $elements, 'The ClassDefinition exists in the FileDefinition');
     }
 
-    public function testGetDatabase($database = MigrationImageTest::DATABASE_DEFAULT)
+    public function testGetDatabase($database = self::DATABASE_DEFAULT)
     {
         $this->assertEquals($database, $this->migrationImage->getDatabase(), 'Test the database getter');
     }

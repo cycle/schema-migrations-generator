@@ -47,14 +47,13 @@ use Spiral\Tokenizer\Tokenizer;
 
 abstract class BaseTest extends TestCase
 {
-
     // currently active driver
     public const DRIVER = null;
 
     public const CONFIG = [
         'directory' => __DIR__ . '/../files/',
-        'table'     => 'migrations',
-        'safe'      => true,
+        'table' => 'migrations',
+        'safe' => true,
         'namespace' => 'Migration',
     ];
     // tests configuration
@@ -91,7 +90,7 @@ abstract class BaseTest extends TestCase
         parent::setUp();
 
         $this->dbal = new DatabaseManager(new DatabaseConfig([
-            'default'   => 'default',
+            'default' => 'default',
             'databases' => [],
         ]));
         $this->dbal->addDatabase(new Database(
@@ -127,7 +126,7 @@ abstract class BaseTest extends TestCase
 
         $tokenizer = new Tokenizer(new TokenizerConfig([
             'directories' => [__DIR__ . '/Fixtures'],
-            'exclude'     => [],
+            'exclude' => [],
         ]));
 
         $this->locator = $tokenizer->classLocator();
@@ -142,7 +141,7 @@ abstract class BaseTest extends TestCase
                 new Container(),
                 new Tokenizer(new TokenizerConfig([
                     'directories' => [__DIR__ . '/../files'],
-                    'exclude'     => [],
+                    'exclude' => [],
                 ]))
             )
         );
@@ -171,7 +170,8 @@ abstract class BaseTest extends TestCase
      * Calculates missing parameters for typecasting.
      *
      * @param SchemaInterface $schema
-     * @return ORM|\Cycle\ORM\ORMInterface
+     *
+     * @return \Cycle\ORM\ORMInterface|ORM
      */
     public function withSchema(SchemaInterface $schema)
     {
@@ -194,9 +194,9 @@ abstract class BaseTest extends TestCase
 
             $this->driver = new $class([
                 'connection' => $config['conn'],
-                'username'   => $config['user'],
-                'password'   => $config['pass'],
-                'options'    => []
+                'username' => $config['user'],
+                'password' => $config['pass'],
+                'options' => [],
             ]);
         }
 
@@ -209,7 +209,7 @@ abstract class BaseTest extends TestCase
     {
         $tokenizer = new Tokenizer(new TokenizerConfig([
             'directories' => [$directory],
-            'exclude'     => [],
+            'exclude' => [],
         ]));
 
         $locator = $tokenizer->classLocator();
@@ -227,7 +227,7 @@ abstract class BaseTest extends TestCase
             new RenderRelations(),
             new MergeIndexes($p),
             new GenerateTypecast(),
-            new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG))
+            new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG)),
         ]);
 
         $tables = [];
@@ -276,7 +276,7 @@ abstract class BaseTest extends TestCase
      */
     protected function enableProfiling(): void
     {
-        if (!is_null($this->logger)) {
+        if (null !== $this->logger) {
             $this->logger->display();
         }
     }
@@ -286,7 +286,7 @@ abstract class BaseTest extends TestCase
      */
     protected function disableProfiling(): void
     {
-        if (!is_null($this->logger)) {
+        if (null !== $this->logger) {
             $this->logger->hide();
         }
     }
@@ -413,6 +413,7 @@ abstract class BaseTest extends TestCase
     /**
      * @param string     $table
      * @param Comparator $comparator
+     *
      * @return string
      */
     protected function makeMessage(string $table, Comparator $comparator)
@@ -436,7 +437,7 @@ abstract class BaseTest extends TestCase
                 print_r($pair);
             }
 
-            return "Table '{$table}' not synced, column(s) '" . join(
+            return "Table '{$table}' not synced, column(s) '" . implode(
                 "', '",
                 $names
             ) . "' have been changed.";

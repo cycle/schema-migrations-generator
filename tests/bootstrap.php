@@ -15,44 +15,44 @@ ini_set('display_errors', '1');
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
-    'debug'     => false,
-    'strict'    => true,
+    'debug' => false,
+    'strict' => true,
     'benchmark' => false,
-    'sqlite'    => [
+    'sqlite' => [
         'driver' => \Cycle\Database\Driver\SQLite\SQLiteDriver::class,
-        'check'  => function () {
+        'check' => function () {
             return !in_array('sqlite', \PDO::getAvailableDrivers());
         },
-        'conn'   => 'sqlite::memory:',
-        'user'   => 'sqlite',
-        'pass'   => ''
+        'conn' => 'sqlite::memory:',
+        'user' => 'sqlite',
+        'pass' => '',
     ],
-    'mysql'     => [
+    'mysql' => [
         'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
-        'check'  => function () {
+        'check' => function () {
             return !in_array('mysql', \PDO::getAvailableDrivers());
         },
-        'conn'   => 'mysql:host=127.0.0.1:13306;dbname=spiral',
-        'user'   => 'root',
-        'pass'   => 'root'
+        'conn' => 'mysql:host=127.0.0.1:13306;dbname=spiral',
+        'user' => 'root',
+        'pass' => 'root',
     ],
-    'postgres'  => [
+    'postgres' => [
         'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
-        'check'  => function () {
+        'check' => function () {
             return !in_array('pgsql', \PDO::getAvailableDrivers());
         },
-        'conn'   => 'pgsql:host=127.0.0.1;port=15432;dbname=spiral',
-        'user'   => 'postgres',
-        'pass'   => 'postgres'
+        'conn' => 'pgsql:host=127.0.0.1;port=15432;dbname=spiral',
+        'user' => 'postgres',
+        'pass' => 'postgres',
     ],
     'sqlserver' => [
         'driver' => \Cycle\Database\Driver\SQLServer\SQLServerDriver::class,
-        'check'  => function () {
+        'check' => function () {
             return !in_array('sqlsrv', \PDO::getAvailableDrivers());
         },
-        'conn'   => 'sqlsrv:Server=127.0.0.1,11433;Database=tempdb',
-        'user'   => 'sa',
-        'pass'   => 'SSpaSS__1'
+        'conn' => 'sqlsrv:Server=127.0.0.1,11433;Database=tempdb',
+        'user' => 'sa',
+        'pass' => 'SSpaSS__1',
     ],
 ];
 
@@ -60,15 +60,15 @@ if (!empty(getenv('DB'))) {
     switch (getenv('DB')) {
         case 'postgres':
             \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
-                'debug'    => false,
+                'debug' => false,
                 'postgres' => [
                     'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
-                    'check'  => function () {
+                    'check' => function () {
                         return true;
                     },
-                    'conn'   => 'pgsql:host=127.0.0.1;port=5432;dbname=spiral',
-                    'user'   => 'postgres',
-                    'pass'   => 'postgres',
+                    'conn' => 'pgsql:host=127.0.0.1;port=5432;dbname=spiral',
+                    'user' => 'postgres',
+                    'pass' => 'postgres',
                 ],
             ];
             break;
@@ -78,12 +78,12 @@ if (!empty(getenv('DB'))) {
                 'debug' => false,
                 'mysql' => [
                     'driver' => \Cycle\Database\Driver\MySQL\MySQLDriver::class,
-                    'check'  => function () {
+                    'check' => function () {
                         return true;
                     },
-                    'conn'   => 'mysql:host=127.0.0.1:23306;dbname=spiral',
-                    'user'   => 'root',
-                    'pass'   => 'root',
+                    'conn' => 'mysql:host=127.0.0.1:23306;dbname=spiral',
+                    'user' => 'root',
+                    'pass' => 'root',
                 ],
             ];
             break;

@@ -11,7 +11,6 @@ use Spiral\Reactor\FileDeclaration;
 
 class MigrationImage
 {
-
     /** @var string */
     public $fileNamePattern = '{database}_{name}';
     /** @var ClassDeclaration */
