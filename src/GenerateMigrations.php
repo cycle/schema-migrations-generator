@@ -26,34 +26,15 @@ use Cycle\Migrations\RepositoryInterface;
  */
 class GenerateMigrations implements GeneratorInterface
 {
-    /** @var int */
-    private static $sec = 0;
-
-    /** @var RepositoryInterface */
-    private $repository;
-
-    /** @var MigrationConfig $migrationConfig */
-    private $migrationConfig;
+    private static int $sec = 0;
 
     /**
      * GenerateMigrations constructor.
-     *
-     * @param RepositoryInterface $migrationRepository
-     * @param MigrationConfig     $migrationConfig
      */
-    public function __construct(
-        RepositoryInterface $migrationRepository,
-        MigrationConfig $migrationConfig
-    ) {
-        $this->repository = $migrationRepository;
-        $this->migrationConfig = $migrationConfig;
+    public function __construct(private RepositoryInterface $repository, private MigrationConfig $migrationConfig)
+    {
     }
 
-    /**
-     * @param Registry $registry
-     *
-     * @return Registry
-     */
     public function run(Registry $registry): Registry
     {
         $databases = [];
@@ -79,9 +60,7 @@ class GenerateMigrations implements GeneratorInterface
     }
 
     /**
-     * @param string          $database
      * @param AbstractTable[] $tables
-     *
      * @return array [string, FileDeclaration]
      */
     protected function generate(string $database, array $tables): ?MigrationImage
@@ -110,11 +89,6 @@ class GenerateMigrations implements GeneratorInterface
         return $image;
     }
 
-    /**
-     * @param Atomizer $atomizer
-     *
-     * @return string
-     */
     private function generateName(Atomizer $atomizer): string
     {
         $name = [];

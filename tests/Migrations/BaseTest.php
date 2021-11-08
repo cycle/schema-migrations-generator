@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace Cycle\Schema\Generator\Migrations\Tests;
 
 use Cycle\Annotated\Entities;
-use Cycle\Annotated\Generator;
 use Cycle\Annotated\MergeColumns;
 use Cycle\Annotated\MergeIndexes;
+use Cycle\Database\Driver\DriverInterface;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\ORM\Config\RelationConfig;
 use Cycle\ORM\Factory;
@@ -29,11 +29,12 @@ use Cycle\Schema\Generator\ResetTables;
 use Cycle\Schema\Generator\ValidateEntities;
 use Cycle\Schema\Registry;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Spiral\Attributes\AttributeReader;
 use Spiral\Core\Container;
 use Cycle\Database\Config\DatabaseConfig;
 use Cycle\Database\Database;
 use Cycle\Database\DatabaseManager;
-use Cycle\Database\Driver\Driver;
 use Cycle\Database\Driver\Handler;
 use Cycle\Database\Schema\AbstractTable;
 use Cycle\Database\Schema\Comparator;
@@ -57,30 +58,17 @@ abstract class BaseTest extends TestCase
         'namespace' => 'Migration',
     ];
     // tests configuration
-    public static $config;
+    public static array $config;
 
     // cross test driver cache
-    public static $driverCache = [];
+    public static array $driverCache = [];
 
-    protected static $lastORM;
-
-    /** @var Driver */
-    protected $driver;
-
-    /** @var DatabaseManager */
-    protected $dbal;
-
-    /** @var ORM */
-    protected $orm;
-
-    /** @var TestLogger */
-    protected $logger;
-
-    /** @var ClassesInterface */
-    protected $locator;
-
-    /** @var Migrator */
-    protected $migrator;
+    protected DriverInterface $driver;
+    protected ?DatabaseManager $dbal = null;
+    protected ?ORM $orm = null;
+    protected LoggerInterface $logger;
+    protected ClassesInterface $locator;
+    protected Migrator $migrator;
 
     /**
      * Init all we need.
@@ -122,7 +110,7 @@ abstract class BaseTest extends TestCase
         $this->orm = new ORM(new Factory(
             $this->dbal,
             RelationConfig::getDefault()
-        ));
+        ), new \Cycle\ORM\Schema([]));
 
         $tokenizer = new Tokenizer(new TokenizerConfig([
             'directories' => [__DIR__ . '/Fixtures'],
@@ -138,11 +126,7 @@ abstract class BaseTest extends TestCase
             $this->dbal,
             new FileRepository(
                 $config,
-                new Container(),
-                new Tokenizer(new TokenizerConfig([
-                    'directories' => [__DIR__ . '/../files'],
-                    'exclude' => [],
-                ]))
+                new Container()
             )
         );
 
@@ -168,21 +152,14 @@ abstract class BaseTest extends TestCase
 
     /**
      * Calculates missing parameters for typecasting.
-     *
-     * @param SchemaInterface $schema
-     *
-     * @return \Cycle\ORM\ORMInterface|ORM
      */
-    public function withSchema(SchemaInterface $schema)
+    public function withSchema(SchemaInterface $schema): ORM
     {
         $this->orm = $this->orm->withSchema($schema);
         return $this->orm;
     }
 
-    /**
-     * @return Driver
-     */
-    public function getDriver(): Driver
+    public function getDriver(): DriverInterface
     {
         if (isset(static::$driverCache[static::DRIVER])) {
             return static::$driverCache[static::DRIVER];
@@ -190,17 +167,8 @@ abstract class BaseTest extends TestCase
 
         $config = self::$config[static::DRIVER];
         if (!isset($this->driver)) {
-            $class = $config['driver'];
-
-            $this->driver = new $class([
-                'connection' => $config['conn'],
-                'username' => $config['user'],
-                'password' => $config['pass'],
-                'options' => [],
-            ]);
+            $this->driver = $config->driver::create($config);
         }
-
-        $this->driver->setProfiling(true);
 
         return static::$driverCache[static::DRIVER] = $this->driver;
     }
@@ -214,18 +182,18 @@ abstract class BaseTest extends TestCase
 
         $locator = $tokenizer->classLocator();
 
-        $p = Generator::getDefaultParser();
+        $reader = new AttributeReader();
         $r = new Registry($this->dbal);
 
-        $schema = (new Compiler())->compile($r, [
-            new Entities($locator, $p),
+        (new Compiler())->compile($r, [
+            new Entities($locator, $reader),
             new ResetTables(),
-            new MergeColumns($p),
+            new MergeColumns($reader),
             new GenerateRelations(),
             new ValidateEntities(),
             new RenderTables(),
             new RenderRelations(),
-            new MergeIndexes($p),
+            new MergeIndexes($reader),
             new GenerateTypecast(),
             new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG)),
         ]);
@@ -237,9 +205,6 @@ abstract class BaseTest extends TestCase
         return $tables;
     }
 
-    /**
-     * @return Database
-     */
     protected function getDatabase(): Database
     {
         return $this->dbal->database('default');
@@ -294,7 +259,7 @@ abstract class BaseTest extends TestCase
     protected function assertSameAsInDB(AbstractTable $current): void
     {
         $source = $current->getState();
-        $target = $current->getDriver()->getSchema($current->getName())->getState();
+        $target = $current->getDriver()->getSchemaHandler()->getSchema($current->getName())->getState();
 
         // testing changes
 
@@ -402,7 +367,7 @@ abstract class BaseTest extends TestCase
         // everything else
         $comparator = new Comparator(
             $current->getState(),
-            $current->getDriver()->getSchema($current->getName())->getState()
+            $current->getDriver()->getSchemaHandler()->getSchema($current->getName())->getState()
         );
 
         if ($comparator->hasChanges()) {
@@ -410,13 +375,7 @@ abstract class BaseTest extends TestCase
         }
     }
 
-    /**
-     * @param string     $table
-     * @param Comparator $comparator
-     *
-     * @return string
-     */
-    protected function makeMessage(string $table, Comparator $comparator)
+    protected function makeMessage(string $table, Comparator $comparator): string
     {
         if ($comparator->isPrimaryChanged()) {
             return "Table '{$table}' not synced, primary indexes are different.";

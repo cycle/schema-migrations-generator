@@ -11,22 +11,16 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Init;
 
-/**
- * @entity
- */
+use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Relation\BelongsTo;
+
+#[Entity]
 class Post
 {
-    /**
-     * @column(type=primary)
-     *
-     * @var int
-     */
-    protected $id;
+    #[Column(type: 'primary')]
+    protected int $id;
 
-    /**
-     * @belongsTo(target=User,nullable=false)
-     *
-     * @var User
-     */
-    protected $user;
+    #[BelongsTo(target: User::class, nullable: false)]
+    protected User $user;
 }

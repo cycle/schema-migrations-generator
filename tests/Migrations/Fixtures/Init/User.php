@@ -11,25 +11,17 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Init;
 
-/**
- * @entity
- * @table(
- *     indexes={@index(columns={email},unique=true)}
- * )
- */
+use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Table\Index;
+
+#[Entity]
+#[Index(columns: ['email'], unique: true)]
 class User
 {
-    /**
-     * @column(type=primary)
-     *
-     * @var int
-     */
-    protected $id;
+    #[Column(type: 'primary')]
+    protected int $id;
 
-    /**
-     * @column(type=string)
-     *
-     * @var string
-     */
+    #[Column(type: 'string')]
     protected $email;
 }

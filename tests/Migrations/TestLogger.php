@@ -19,16 +19,10 @@ class TestLogger implements LoggerInterface
 {
     use LoggerTrait;
 
-    private $display;
+    private bool $display = false;
 
-    private $countWrites;
-    private $countReads;
-
-    public function __construct()
-    {
-        $this->countWrites = 0;
-        $this->countReads = 0;
-    }
+    private int $countWrites = 0;
+    private int $countReads = 0;
 
     public function countWriteQueries(): int
     {
@@ -45,9 +39,9 @@ class TestLogger implements LoggerInterface
         if (!empty($context['query'])) {
             $sql = strtolower($context['query']);
             if (
-                strpos($sql, 'insert') === 0
-                || strpos($sql, 'update') === 0
-                || strpos($sql, 'delete') === 0
+                str_starts_with($sql, 'insert')
+                || str_starts_with($sql, 'update')
+                || str_starts_with($sql, 'delete')
             ) {
                 $this->countWrites++;
             } else {
@@ -65,7 +59,7 @@ class TestLogger implements LoggerInterface
             echo " \n! \033[31m" . $message . "\033[0m";
         } elseif ($level == LogLevel::ALERT) {
             echo " \n! \033[35m" . $message . "\033[0m";
-        } elseif (strpos($message, 'SHOW') === 0) {
+        } elseif (str_starts_with($message, 'SHOW')) {
             echo " \n> \033[34m" . $message . "\033[0m";
         } else {
             if ($this->isPostgresSystemQuery($message)) {
@@ -74,9 +68,9 @@ class TestLogger implements LoggerInterface
                 return;
             }
 
-            if (strpos($message, 'SELECT') === 0) {
+            if (str_starts_with($message, 'SELECT')) {
                 echo " \n> \033[32m" . $message . "\033[0m";
-            } elseif (strpos($message, 'INSERT') === 0) {
+            } elseif (str_starts_with($message, 'INSERT')) {
                 echo " \n> \033[36m" . $message . "\033[0m";
             } else {
                 echo " \n> \033[33m" . $message . "\033[0m";
@@ -97,17 +91,11 @@ class TestLogger implements LoggerInterface
     protected function isPostgresSystemQuery(string $query): bool
     {
         $query = strtolower($query);
-        return (bool) (
-            strpos($query, 'tc.constraint_name')
-            || strpos($query, 'pg_indexes')
-            || strpos($query, 'tc.constraint_name')
-            || strpos($query, 'pg_constraint')
-            || strpos($query, 'information_schema')
-            || strpos($query, 'pg_class')
-        )
-
-
-
-         ;
+        return strpos($query, 'tc.constraint_name')
+        || strpos($query, 'pg_indexes')
+        || strpos($query, 'tc.constraint_name')
+        || strpos($query, 'pg_constraint')
+        || strpos($query, 'information_schema')
+        || strpos($query, 'pg_class');
     }
 }

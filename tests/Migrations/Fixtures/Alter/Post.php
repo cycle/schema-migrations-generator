@@ -11,22 +11,16 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Alter;
 
-/**
- * @entity
- */
+use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Relation\BelongsTo;
+
+#[Entity]
 class Post
 {
-    /**
-     * @column(type=primary)
-     *
-     * @var int
-     */
-    protected $id;
+    #[Column(type: 'primary')]
+    protected int $id;
 
-    /**
-     * @refersTo(target=Other,nullable=true)
-     *
-     * @var Other
-     */
-    protected $other;
+    #[BelongsTo(target: Other::class, nullable: false)]
+    protected Other $other;
 }
