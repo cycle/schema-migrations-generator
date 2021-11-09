@@ -28,11 +28,10 @@ class GenerateMigrations implements GeneratorInterface
 {
     private static int $sec = 0;
 
-    /**
-     * GenerateMigrations constructor.
-     */
-    public function __construct(private RepositoryInterface $repository, private MigrationConfig $migrationConfig)
-    {
+    public function __construct(
+        private RepositoryInterface $repository,
+        private MigrationConfig $migrationConfig
+    ) {
     }
 
     public function run(Registry $registry): Registry

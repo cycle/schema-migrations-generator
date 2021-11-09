@@ -17,11 +17,10 @@ class MigrationImage
     protected ?string $database = null;
     protected string $name = '';
 
-    /**
-     * MigrationImage constructor.
-     */
-    public function __construct(protected MigrationConfig $migrationConfig, string $database)
-    {
+    public function __construct(
+        protected MigrationConfig $migrationConfig,
+        string $database
+    ) {
         $this->class = new ClassDeclaration('newMigration', 'Migration');
 
         $this->class->method('up')->setReturn('void')->setPublic();
