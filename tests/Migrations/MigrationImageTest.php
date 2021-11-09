@@ -33,7 +33,6 @@ class MigrationImageTest extends TestCase
         return [
             ['Default'],
             ['#$%^&*('],
-            [98764310],
             [''],
         ];
     }
@@ -43,7 +42,6 @@ class MigrationImageTest extends TestCase
         return [
             ['simple'],
             ['camelCase'],
-            [123],
             [''],
         ];
     }
@@ -79,7 +77,7 @@ class MigrationImageTest extends TestCase
      */
     public function testSetDatabase(mixed $database): void
     {
-        $this->migrationImage->setDatabase($database);
+        $this->migrationImage->setDatabase((string) $database);
 
         $this->testGetDatabase($database);
 
@@ -133,12 +131,12 @@ class MigrationImageTest extends TestCase
      */
     public function testSetName(mixed $name): void
     {
-        $this->migrationImage->setName($name);
+        $this->migrationImage->setName((string) $name);
 
-        $this->testGetName($name);
+        $this->testGetName((string) $name);
 
-        if (strlen($name)) {
-            $this->substringInFileName($name, '{name}', 'Migration name in the filename');
+        if (strlen((string) $name)) {
+            $this->substringInFileName((string) $name, '{name}', 'Migration name in the filename');
         }
     }
 }
