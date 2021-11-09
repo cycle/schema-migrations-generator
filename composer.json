@@ -4,7 +4,7 @@
   "license": "MIT",
   "description": "Cycle ORM Migration generation",
   "require": {
-    "php": ">=7.2",
+    "php": ">=8.0",
     "cycle/database": "dev-master",
     "cycle/schema-builder": "2.0.x-dev",
     "cycle/migrations": "2.0.x-dev"

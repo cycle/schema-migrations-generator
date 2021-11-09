@@ -12,10 +12,8 @@ use Spiral\Reactor\FileDeclaration;
 
 class MigrationImageTest extends TestCase
 {
-    /** @var MigrationImage */
-    protected $migrationImage;
-    /** @var MigrationConfig */
-    protected static $defaultMigrationConfig;
+    protected MigrationImage $migrationImage;
+    protected static MigrationConfig $defaultMigrationConfig;
 
     protected const DATABASE_DEFAULT = 'defaultDatabaseName';
 
@@ -30,27 +28,25 @@ class MigrationImageTest extends TestCase
         $this->migrationImage = new MigrationImage(static::$defaultMigrationConfig, static::DATABASE_DEFAULT);
     }
 
-    public function databaseData()
+    public function databaseData(): array
     {
         return [
             ['Default'],
             ['#$%^&*('],
-            [98764310],
             [''],
         ];
     }
 
-    public function migrationNameData()
+    public function migrationNameData(): array
     {
         return [
             ['simple'],
             ['camelCase'],
-            [123],
             [''],
         ];
     }
 
-    public function testRequires()
+    public function testRequires(): void
     {
         $class = $this->migrationImage->getClass();
         $constValue = $class->constant('DATABASE')->getValue();
@@ -71,7 +67,7 @@ class MigrationImageTest extends TestCase
         $this->assertContains($class, $elements, 'The ClassDefinition exists in the FileDefinition');
     }
 
-    public function testGetDatabase($database = self::DATABASE_DEFAULT)
+    public function testGetDatabase($database = self::DATABASE_DEFAULT): void
     {
         $this->assertEquals($database, $this->migrationImage->getDatabase(), 'Test the database getter');
     }
@@ -79,7 +75,7 @@ class MigrationImageTest extends TestCase
     /**
      * @dataProvider databaseData
      */
-    public function testSetDatabase($database)
+    public function testSetDatabase(mixed $database): void
     {
         $this->migrationImage->setDatabase($database);
 
@@ -89,22 +85,22 @@ class MigrationImageTest extends TestCase
         $this->assertEquals($database, $constValue, 'DATABASE constant changed in the class declaration');
     }
 
-    public function testGetMigrationConfig()
+    public function testGetMigrationConfig(): void
     {
         $this->assertEquals(static::$defaultMigrationConfig, $this->migrationImage->getMigrationConfig());
     }
 
-    public function testGetClass()
+    public function testGetClass(): void
     {
         $this->assertInstanceOf(ClassDeclaration::class, $this->migrationImage->getClass());
     }
 
-    public function testGetFile()
+    public function testGetFile(): void
     {
         $this->assertInstanceOf(FileDeclaration::class, $this->migrationImage->getFile());
     }
 
-    public function testBuildFileName()
+    public function testBuildFileName(): void
     {
         $this->substringInFileName(static::DATABASE_DEFAULT, '{database}', 'Default database name in the filename');
 
@@ -112,7 +108,7 @@ class MigrationImageTest extends TestCase
         $this->assertEquals('', $this->migrationImage->buildFileName(), 'Empty pattern');
     }
 
-    protected function substringInFileName(string $substr, ?string $pattern = null, string $message = '')
+    protected function substringInFileName(string $substr, ?string $pattern = null, string $message = ''): void
     {
         if (is_string($pattern)) {
             $this->migrationImage->fileNamePattern = $pattern;
@@ -125,7 +121,7 @@ class MigrationImageTest extends TestCase
      * @param string $name Empty string by default because the migration name in the MigrationImage instance
      *                     is also empty string
      */
-    public function testGetName(string $name = '')
+    public function testGetName(string $name = ''): void
     {
         $this->assertEquals($name, $this->migrationImage->getName(), 'Test the name getter');
     }
@@ -133,7 +129,7 @@ class MigrationImageTest extends TestCase
     /**
      * @dataProvider migrationNameData
      */
-    public function testSetName($name)
+    public function testSetName(mixed $name): void
     {
         $this->migrationImage->setName($name);
 

@@ -11,79 +11,48 @@ use Spiral\Reactor\FileDeclaration;
 
 class MigrationImage
 {
-    /** @var string */
-    public $fileNamePattern = '{database}_{name}';
-    /** @var ClassDeclaration */
-    protected $class;
+    public string $fileNamePattern = '{database}_{name}';
+    protected ClassDeclaration $class;
+    protected FileDeclaration $file;
+    protected ?string $database = null;
+    protected string $name = '';
 
-    /** @var FileDeclaration */
-    protected $file;
-
-    /** @var MigrationConfig */
-    protected $migrationConfig;
-
-    /** @var string */
-    protected $database;
-
-    /** @var string */
-    protected $name = '';
-
-    /**
-     * MigrationImage constructor.
-     *
-     * @param MigrationConfig $config
-     * @param string          $database
-     */
-    public function __construct(MigrationConfig $config, string $database)
-    {
-        $this->migrationConfig = $config;
+    public function __construct(
+        protected MigrationConfig $migrationConfig,
+        string $database
+    ) {
         $this->class = new ClassDeclaration('newMigration', 'Migration');
 
         $this->class->method('up')->setReturn('void')->setPublic();
         $this->class->method('down')->setReturn('void')->setPublic();
 
-        $this->file = new FileDeclaration($config->getNamespace());
+        $this->file = new FileDeclaration($migrationConfig->getNamespace());
         $this->file->addUse(Migration::class);
         $this->file->addElement($this->class);
 
         $this->setDatabase($database);
     }
 
-    /**
-     * @return ClassDeclaration
-     */
     public function getClass(): ClassDeclaration
     {
         return $this->class;
     }
 
-    /**
-     * @return FileDeclaration
-     */
     public function getFile(): FileDeclaration
     {
         return $this->file;
     }
 
-    /**
-     * @return MigrationConfig
-     */
     public function getMigrationConfig(): MigrationConfig
     {
         return $this->migrationConfig;
     }
 
-    /**
-     * @return string
-     */
     public function getDatabase(): string
     {
         return $this->database;
     }
 
-    /**
-     * @param string $database
-     */
     public function setDatabase(string $database): void
     {
         $this->database = $database;
@@ -98,25 +67,16 @@ class MigrationImage
         $this->class->constant('DATABASE')->setProtected()->setValue($database);
     }
 
-    /**
-     * @return string
-     */
     public function buildFileName(): string
     {
         return str_replace(['{database}', '{name}'], [$this->database, $this->name], $this->fileNamePattern);
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;

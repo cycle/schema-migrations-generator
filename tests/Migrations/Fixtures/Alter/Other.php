@@ -11,22 +11,15 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Alter;
 
-/**
- * @entity(database=secondary)
- */
+use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Column;
+
+#[Entity(database: 'secondary')]
 class Other
 {
-    /**
-     * @column(type=primary)
-     *
-     * @var int
-     */
-    protected $id;
+    #[Column(type: 'primary')]
+    protected int $id;
 
-    /**
-     * @column(type="enum(active,disabled,pending)",castDefault=true)
-     *
-     * @var string
-     */
-    protected $status;
+    #[Column(type: 'enum(active,disabled,pending)', default: 'active')]
+    protected string $status;
 }
