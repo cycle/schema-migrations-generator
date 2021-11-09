@@ -61,6 +61,7 @@ class GenerateMigrations implements GeneratorInterface
 
     /**
      * @param AbstractTable[] $tables
+     *
      * @return array [string, FileDeclaration]
      */
     protected function generate(string $database, array $tables): ?MigrationImage
