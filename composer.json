@@ -25,5 +25,10 @@
     "psr-4": {
       "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
     }
-  }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
