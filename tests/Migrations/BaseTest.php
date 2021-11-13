@@ -47,8 +47,6 @@ use Spiral\Tokenizer\ClassesInterface;
 use Spiral\Tokenizer\Config\TokenizerConfig;
 use Spiral\Tokenizer\Tokenizer;
 
-use function is_null;
-
 abstract class BaseTest extends TestCase
 {
     // currently active driver
@@ -237,7 +235,7 @@ abstract class BaseTest extends TestCase
 
     protected function dropDatabase(?Database $database = null): void
     {
-        if (is_null($database)) {
+        if (null === $database) {
             return;
         }
 
