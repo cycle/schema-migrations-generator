@@ -19,6 +19,12 @@ use Cycle\Migrations\Atomizer\Atomizer;
 use Cycle\Migrations\Atomizer\Renderer;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\RepositoryInterface;
+use Spiral\Migrations\Config\MigrationConfig as SpiralMigrationConfig;
+use Spiral\Migrations\RepositoryInterface as SpiralRepositoryInterface;
+use Cycle\Migrations\GenerateMigrations as CycleMigrationsGenerateMigrations;
+
+\interface_exists(SpiralRepositoryInterface::class);
+\class_exists(SpiralMigrationConfig::class);
 
 /**
  * Migration generator creates set of migrations needed to sync database schema with desired state. Each database will
@@ -42,8 +48,8 @@ class GenerateMigrations implements GeneratorInterface
      * @param MigrationConfig     $migrationConfig
      */
     public function __construct(
-        RepositoryInterface $migrationRepository,
-        MigrationConfig $migrationConfig
+        SpiralRepositoryInterface $migrationRepository,
+        SpiralMigrationConfig $migrationConfig
     ) {
         $this->repository = $migrationRepository;
         $this->migrationConfig = $migrationConfig;
@@ -179,3 +185,4 @@ class GenerateMigrations implements GeneratorInterface
         return implode('_', $name);
     }
 }
+\class_alias(GenerateMigrations::class, CycleMigrationsGenerateMigrations::class, false);

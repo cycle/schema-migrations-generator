@@ -3,20 +3,26 @@
   "type": "library",
   "license": "MIT",
   "description": "Cycle ORM Migration generation",
+  "replace": {
+    "cycle/migrations": "^1.0"
+  },
   "require": {
     "php": ">=7.2",
-    "cycle/database": "dev-master",
-    "cycle/schema-builder": "2.0.x-dev",
-    "cycle/migrations": "2.0.x-dev"
+    "cycle/database": "^1.0.2",
+    "cycle/schema-builder": "^1.2",
+    "cycle/migrations": "^2.0"
   },
   "require-dev": {
-    "cycle/orm": "2.0.x-dev",
+    "cycle/orm": "^1.7.1",
     "phpunit/phpunit": "~8.0",
-    "cycle/annotated": "2.0.x-dev",
+    "cycle/annotated": "^2.4",
     "spiral/debug": "^2.7",
     "spiral/code-style": "^1.0"
   },
   "autoload": {
+    "files": [
+      "src/polyfill.php"
+    ],
     "psr-4": {
       "Cycle\\Schema\\Generator\\Migrations\\": "src/"
     }
@@ -25,5 +31,10 @@
     "psr-4": {
       "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
     }
-  }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

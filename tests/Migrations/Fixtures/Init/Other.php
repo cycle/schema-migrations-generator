@@ -11,20 +11,23 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Init;
 
+use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
+
 /**
- * @entity(database=secondary)
+ * @Entity(database = "secondary")
  */
 class Other
 {
     /**
-     * @column(type=primary)
+     * @Column(type = "primary")
      *
      * @var int
      */
     protected $id;
 
     /**
-     * @column(type="enum(active,disabled)",castDefault=true)
+     * @Column(type = "enum(active,disabled)")
      *
      * @var string
      */

@@ -51,28 +51,13 @@ require dirname(__DIR__) . '/vendor/autoload.php';
             return !in_array('sqlsrv', \PDO::getAvailableDrivers());
         },
         'conn' => 'sqlsrv:Server=127.0.0.1,11433;Database=tempdb',
-        'user' => 'sa',
+        'user' => 'SA',
         'pass' => 'SSpaSS__1',
     ],
 ];
 
 if (!empty(getenv('DB'))) {
     switch (getenv('DB')) {
-        case 'postgres':
-            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
-                'debug' => false,
-                'postgres' => [
-                    'driver' => \Cycle\Database\Driver\Postgres\PostgresDriver::class,
-                    'check' => function () {
-                        return true;
-                    },
-                    'conn' => 'pgsql:host=127.0.0.1;port=5432;dbname=spiral',
-                    'user' => 'postgres',
-                    'pass' => 'postgres',
-                ],
-            ];
-            break;
-
         case 'mariadb':
             \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
                 'debug' => false,

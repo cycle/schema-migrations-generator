@@ -12,9 +12,10 @@ declare(strict_types=1);
 namespace Cycle\Schema\Generator\Migrations\Tests;
 
 use Cycle\Annotated\Entities;
-use Cycle\Annotated\Generator;
 use Cycle\Annotated\MergeColumns;
 use Cycle\Annotated\MergeIndexes;
+use Cycle\Database\Driver\DriverInterface;
+use Cycle\Migrations\Migrator\MigrationsTable;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\ORM\Config\RelationConfig;
 use Cycle\ORM\Factory;
@@ -41,9 +42,12 @@ use Spiral\Files\Files;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\FileRepository;
 use Cycle\Migrations\Migrator;
+use Spiral\Attributes\AnnotationReader;
 use Spiral\Tokenizer\ClassesInterface;
 use Spiral\Tokenizer\Config\TokenizerConfig;
 use Spiral\Tokenizer\Tokenizer;
+
+use function is_null;
 
 abstract class BaseTest extends TestCase
 {
@@ -93,17 +97,12 @@ abstract class BaseTest extends TestCase
             'default' => 'default',
             'databases' => [],
         ]));
-        $this->dbal->addDatabase(new Database(
-            'default',
-            '',
-            $this->getDriver()
-        ));
 
-        $this->dbal->addDatabase(new Database(
-            'secondary',
-            'secondary_',
-            $this->getDriver()
-        ));
+        $default = new Database('default', '', $this->getDriver());
+        $secondary = new Database('secondary', 'secondary_', $this->getDriver());
+
+        $this->dbal->addDatabase($default);
+        $this->dbal->addDatabase($secondary);
 
         $this->logger = new TestLogger();
         $this->getDriver()->setLogger($this->logger);
@@ -138,15 +137,12 @@ abstract class BaseTest extends TestCase
             $this->dbal,
             new FileRepository(
                 $config,
-                new Container(),
-                new Tokenizer(new TokenizerConfig([
-                    'directories' => [__DIR__ . '/../files'],
-                    'exclude' => [],
-                ]))
+                new Container()
             )
         );
 
-        $this->migrator->configure();
+        (new MigrationsTable($default, $config->getTable()))->actualize();
+        (new MigrationsTable($secondary, $config->getTable()))->actualize();
     }
 
     /**
@@ -173,16 +169,13 @@ abstract class BaseTest extends TestCase
      *
      * @return \Cycle\ORM\ORMInterface|ORM
      */
-    public function withSchema(SchemaInterface $schema)
+    public function withSchema(SchemaInterface $schema): ORM
     {
         $this->orm = $this->orm->withSchema($schema);
         return $this->orm;
     }
 
-    /**
-     * @return Driver
-     */
-    public function getDriver(): Driver
+    public function getDriver(): DriverInterface
     {
         if (isset(static::$driverCache[static::DRIVER])) {
             return static::$driverCache[static::DRIVER];
@@ -214,18 +207,18 @@ abstract class BaseTest extends TestCase
 
         $locator = $tokenizer->classLocator();
 
-        $p = Generator::getDefaultParser();
+        $reader = new AnnotationReader();
         $r = new Registry($this->dbal);
 
-        $schema = (new Compiler())->compile($r, [
-            new Entities($locator, $p),
+        (new Compiler())->compile($r, [
+            new Entities($locator, $reader),
             new ResetTables(),
-            new MergeColumns($p),
+            new MergeColumns($reader),
             new GenerateRelations(),
             new ValidateEntities(),
             new RenderTables(),
             new RenderRelations(),
-            new MergeIndexes($p),
+            new MergeIndexes($reader),
             new GenerateTypecast(),
             new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG)),
         ]);
@@ -237,20 +230,14 @@ abstract class BaseTest extends TestCase
         return $tables;
     }
 
-    /**
-     * @return Database
-     */
     protected function getDatabase(): Database
     {
         return $this->dbal->database('default');
     }
 
-    /**
-     * @param Database|null $database
-     */
-    protected function dropDatabase(Database $database = null): void
+    protected function dropDatabase(?Database $database = null): void
     {
-        if (empty($database)) {
+        if (is_null($database)) {
             return;
         }
 
@@ -294,7 +281,7 @@ abstract class BaseTest extends TestCase
     protected function assertSameAsInDB(AbstractTable $current): void
     {
         $source = $current->getState();
-        $target = $current->getDriver()->getSchema($current->getName())->getState();
+        $target = $current->getDriver()->getSchemaHandler()->getSchema($current->getName())->getState();
 
         // testing changes
 
@@ -402,7 +389,7 @@ abstract class BaseTest extends TestCase
         // everything else
         $comparator = new Comparator(
             $current->getState(),
-            $current->getDriver()->getSchema($current->getName())->getState()
+            $current->getDriver()->getSchemaHandler()->getSchema($current->getName())->getState()
         );
 
         if ($comparator->hasChanges()) {
@@ -410,13 +397,7 @@ abstract class BaseTest extends TestCase
         }
     }
 
-    /**
-     * @param string     $table
-     * @param Comparator $comparator
-     *
-     * @return string
-     */
-    protected function makeMessage(string $table, Comparator $comparator)
+    protected function makeMessage(string $table, Comparator $comparator): string
     {
         if ($comparator->isPrimaryChanged()) {
             return "Table '{$table}' not synced, primary indexes are different.";
