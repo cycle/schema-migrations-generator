@@ -8,6 +8,10 @@ use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\Migration;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
+use Spiral\Migrations\Config\MigrationConfig as SpiralMigrationConfig;
+use Cycle\Migrations\MigrationImage as CycleMigrationsMigrationImage;
+
+\class_exists(SpiralMigrationConfig::class);
 
 class MigrationImage
 {
@@ -34,7 +38,7 @@ class MigrationImage
      * @param MigrationConfig $config
      * @param string          $database
      */
-    public function __construct(MigrationConfig $config, string $database)
+    public function __construct(SpiralMigrationConfig $config, string $database)
     {
         $this->migrationConfig = $config;
         $this->class = new ClassDeclaration('newMigration', 'Migration');
@@ -122,3 +126,4 @@ class MigrationImage
         $this->name = $name;
     }
 }
+\class_alias(MigrationImage::class, CycleMigrationsMigrationImage::class, false);

@@ -11,13 +11,16 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Alter;
 
+use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
+
 /**
- * @entity
+ * @Entity
  */
 class User
 {
     /**
-     * @column(type=primary)
+     * @Column(type = "primary")
      *
      * @var int
      */
