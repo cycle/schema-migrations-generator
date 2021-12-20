@@ -13,8 +13,7 @@
     "cycle/orm": "2.0.x-dev",
     "phpunit/phpunit": "~8.0",
     "cycle/annotated": "2.0.x-dev",
-    "spiral/debug": "^2.7",
-    "spiral/code-style": "^1.0"
+    "spiral/debug": "^2.7"
   },
   "autoload": {
     "psr-4": {
