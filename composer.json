@@ -5,14 +5,14 @@
   "description": "Cycle ORM Migration generation",
   "require": {
     "php": ">=8.0",
-    "cycle/database": "dev-master",
-    "cycle/schema-builder": "2.0.x-dev",
-    "cycle/migrations": "2.0.x-dev"
+    "cycle/database": "^2.0",
+    "cycle/schema-builder": "^2.0",
+    "cycle/migrations": "^3.0"
   },
   "require-dev": {
-    "cycle/orm": "2.0.x-dev",
+    "cycle/orm": "^2.0",
     "phpunit/phpunit": "~8.0",
-    "cycle/annotated": "2.0.x-dev",
+    "cycle/annotated": "^3.0",
     "spiral/debug": "^2.7"
   },
   "autoload": {
