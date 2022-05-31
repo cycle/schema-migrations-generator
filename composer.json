@@ -1,33 +1,34 @@
 {
-  "name": "cycle/schema-migrations-generator",
-  "type": "library",
-  "license": "MIT",
-  "description": "Cycle ORM Migration generation",
-  "require": {
-    "php": ">=8.0",
-    "cycle/database": "^2.0",
-    "cycle/schema-builder": "^2.0",
-    "cycle/migrations": "^3.0"
-  },
-  "require-dev": {
-    "cycle/orm": "^2.0",
-    "phpunit/phpunit": "~8.0",
-    "cycle/annotated": "^3.0",
-    "spiral/debug": "^2.7"
-  },
-  "autoload": {
-    "psr-4": {
-      "Cycle\\Schema\\Generator\\Migrations\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
-    }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+    "name": "cycle/schema-migrations-generator",
+    "type": "library",
+    "license": "MIT",
+    "description": "Cycle ORM Migration generation",
+    "require": {
+        "php": ">=8.1",
+        "cycle/database": "^2.0",
+        "cycle/schema-builder": "^2.0",
+        "cycle/migrations": "^4.0"
+    },
+    "require-dev": {
+        "cycle/orm": "^2.0",
+        "phpunit/phpunit": "^9.5",
+        "cycle/annotated": "^3.0",
+        "spiral/debug": "^3.0",
+        "spiral/framework": "3.0.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cycle\\Schema\\Generator\\Migrations\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cycle\\Schema\\Generator\\Migrations\\Tests\\": "tests/Migrations/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

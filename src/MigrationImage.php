@@ -8,6 +8,7 @@ use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\Migration;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
+use Spiral\Reactor\Partial\PhpNamespace;
 
 class MigrationImage
 {
@@ -21,14 +22,17 @@ class MigrationImage
         protected MigrationConfig $migrationConfig,
         string $database
     ) {
-        $this->class = new ClassDeclaration('newMigration', 'Migration');
+        $namespace = new PhpNamespace($migrationConfig->getNamespace());
+        $namespace->addUse(Migration::class);
 
-        $this->class->method('up')->setReturn('void')->setPublic();
-        $this->class->method('down')->setReturn('void')->setPublic();
+        $this->class = $namespace->addClass('newMigration');
+        $this->class->setExtends(Migration::class);
 
-        $this->file = new FileDeclaration($migrationConfig->getNamespace());
-        $this->file->addUse(Migration::class);
-        $this->file->addElement($this->class);
+        $this->class->addMethod('up')->setPublic()->setReturnType('void');
+        $this->class->addMethod('down')->setPublic()->setReturnType('void');
+
+        $this->file = new FileDeclaration();
+        $this->file->addNamespace($namespace);
 
         $this->setDatabase($database);
     }
@@ -64,7 +68,7 @@ class MigrationImage
         );
         $this->class->setName($className);
 
-        $this->class->constant('DATABASE')->setProtected()->setValue($database);
+        $this->class->addConstant('DATABASE', $database)->setProtected();
     }
 
     public function buildFileName(): string
