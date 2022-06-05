@@ -32,7 +32,7 @@ class MigrationImageTest extends TestCase
     {
         return [
             ['Default'],
-            ['#$%^&*('],
+            ['test'],
             [''],
         ];
     }

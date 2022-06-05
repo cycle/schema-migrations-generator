@@ -68,7 +68,10 @@ class MigrationImage
         );
         $this->class->setName($className);
 
-        $this->class->addConstant('DATABASE', $database)->setProtected();
+        if (!$this->class->getConstants()->has('DATABASE')) {
+            $this->class->addConstant('DATABASE', $database)->setProtected();
+        }
+        $this->class->getConstant('DATABASE')->setValue($database);
     }
 
     public function buildFileName(): string
