@@ -49,7 +49,7 @@ class MigrationImageTest extends TestCase
     public function testRequires(): void
     {
         $class = $this->migrationImage->getClass();
-        $constValue = $class->constant('DATABASE')->getValue();
+        $constValue = $class->getConstant('DATABASE')->getValue();
         $this->assertEquals(static::DATABASE_DEFAULT, $constValue, 'Check the DATABASE constant');
         $this->assertNotEmpty($class->getName(), 'Class name is not empty');
 
@@ -63,8 +63,11 @@ class MigrationImageTest extends TestCase
         $this->assertContains('down', $names, 'Method down() exists');
 
         $file = $this->migrationImage->getFile();
-        $elements = $file->getElements();
-        $this->assertContains($class, $elements, 'The ClassDefinition exists in the FileDefinition');
+
+        $this->assertTrue(
+            $file->getClasses()->has($class->getName()),
+            'The ClassDefinition exists in the FileDefinition'
+        );
     }
 
     public function testGetDatabase($database = self::DATABASE_DEFAULT): void
@@ -81,7 +84,7 @@ class MigrationImageTest extends TestCase
 
         $this->testGetDatabase($database);
 
-        $constValue = $this->migrationImage->getClass()->constant('DATABASE')->getValue();
+        $constValue = $this->migrationImage->getClass()->getConstant('DATABASE')->getValue();
         $this->assertEquals($database, $constValue, 'DATABASE constant changed in the class declaration');
     }
 
