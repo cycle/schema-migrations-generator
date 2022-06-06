@@ -45,7 +45,7 @@ class GenerateMigrations implements GeneratorInterface
             $class = $image->getClass()->getName();
             $name = substr($image->buildFileName(), 0, 128);
 
-            $this->repository->registerMigration($name, $class, $image->getFile()->render());
+            $this->repository->registerMigration($name, $class, (string) $image->getFile());
         }
 
         return $registry;
@@ -76,8 +76,8 @@ class GenerateMigrations implements GeneratorInterface
         $image->setName($this->generateName($atomizer));
         $image->fileNamePattern = self::$sec++ . '_{database}_{name}';
 
-        $atomizer->declareChanges($image->getClass()->method('up')->getSource());
-        $atomizer->revertChanges($image->getClass()->method('down')->getSource());
+        $atomizer->declareChanges($image->getClass()->getMethod('up'));
+        $atomizer->revertChanges($image->getClass()->getMethod('down'));
 
         return $image;
     }
