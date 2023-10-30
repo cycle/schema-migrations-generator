@@ -196,7 +196,7 @@ abstract class BaseTest extends TestCase
             new RenderRelations(),
             new MergeIndexes($reader),
             new GenerateTypecast(),
-            $this->getGenerateMigrations()
+            $this->getGenerateMigrations(),
         ]);
 
         $tables = [];
