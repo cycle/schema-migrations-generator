@@ -97,4 +97,4 @@ jobs:
         env:
           DB: sqlite
         run: |
-          vendor/bin/phpunit tests/Migrations/Driver/SQLite
+          vendor/bin/phpunit --group driver-sqlite

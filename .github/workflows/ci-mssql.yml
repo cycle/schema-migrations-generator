@@ -69,4 +69,4 @@ jobs:
       - name: Run tests with phpunit without coverage
         env:
           DB: sqlserver
-        run: vendor/bin/phpunit tests/Migrations/Driver/SQLServer
+        run: vendor/bin/phpunit --group driver-sqlserver
