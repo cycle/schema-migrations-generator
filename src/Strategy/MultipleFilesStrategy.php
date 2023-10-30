@@ -31,11 +31,12 @@ final class MultipleFilesStrategy implements GeneratorStrategyInterface
      */
     public function generate(string $database, array $tables): array
     {
+        $atomizer = new Atomizer(new Renderer());
+
         $images = [];
         foreach ($this->tableSorter->sort($tables) as $table) {
             if ($table->getComparator()->hasChanges()) {
-                $atomizer = new Atomizer(new Renderer());
-                $atomizer->addTable($table);
+                $atomizer->setTables([$table]);
 
                 $image = new MigrationImage($this->migrationConfig, $database);
                 $image->setName($this->nameGenerator->generate($atomizer));
