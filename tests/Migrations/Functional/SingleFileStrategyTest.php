@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
 
-abstract class ReflectTest extends BaseTest
+abstract class SingleFileStrategyTest extends BaseTest
 {
     public function testInit(): void
     {
@@ -29,14 +29,14 @@ abstract class ReflectTest extends BaseTest
 
     public function testNoChanges(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(__DIR__ . '/Fixtures/Init');
 
         $this->assertCount(2, $this->migrator->getMigrations());
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(__DIR__ . '/Fixtures/Init');
         $this->assertCount(2, $this->migrator->getMigrations());
     }
 
