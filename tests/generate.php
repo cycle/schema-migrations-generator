@@ -9,6 +9,7 @@
 
 declare(strict_types=1);
 
+use Cycle\Schema\Generator\Migrations\Tests\Functional\BaseTest;
 use Spiral\Tokenizer;
 
 error_reporting(E_ALL | E_STRICT);
@@ -43,10 +44,10 @@ $databases = [
 
 echo "Generating test classes for all database types...\n";
 
-$classes = $tokenizer->classLocator()->getClasses(\Cycle\Schema\Generator\Migrations\Tests\BaseTest::class);
+$classes = $tokenizer->classLocator()->getClasses(BaseTest::class);
 
 foreach ($classes as $class) {
-    if (!$class->isAbstract() || $class->getName() == \Cycle\Schema\Generator\Migrations\Tests\BaseTest::class) {
+    if (!$class->isAbstract() || $class->getName() == BaseTest::class) {
         continue;
     }
 

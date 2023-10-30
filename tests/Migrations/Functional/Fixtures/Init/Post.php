@@ -9,10 +9,10 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Init;
+namespace Cycle\Schema\Generator\Migrations\Tests\Functional\Fixtures\Init;
 
-use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Column;
+use Cycle\Annotated\Annotation\Entity;
 use Cycle\Annotated\Annotation\Relation\BelongsTo;
 
 #[Entity]
