@@ -7,6 +7,7 @@ namespace Cycle\Schema\Generator\Migrations\Strategy;
 use Cycle\Database\Schema\AbstractTable;
 use Cycle\Migrations\Atomizer\Atomizer;
 use Cycle\Migrations\Atomizer\Renderer;
+use Cycle\Migrations\Atomizer\TableSorter;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Schema\Generator\Migrations\MigrationImage;
 use Cycle\Schema\Generator\Migrations\NameGeneratorInterface;
@@ -17,7 +18,8 @@ final class MultipleFilesStrategy implements GeneratorStrategyInterface
 
     public function __construct(
         private readonly MigrationConfig $migrationConfig,
-        private readonly NameGeneratorInterface $nameGenerator
+        private readonly NameGeneratorInterface $nameGenerator,
+        private readonly TableSorter $tableSorter = new TableSorter()
     ) {
     }
 
@@ -30,7 +32,7 @@ final class MultipleFilesStrategy implements GeneratorStrategyInterface
     public function generate(string $database, array $tables): array
     {
         $images = [];
-        foreach ($tables as $table) {
+        foreach ($this->tableSorter->sort($tables) as $table) {
             if ($table->getComparator()->hasChanges()) {
                 $atomizer = new Atomizer(new Renderer());
                 $atomizer->addTable($table);

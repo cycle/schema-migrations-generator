@@ -8,9 +8,9 @@
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Functional\Driver\Postgres;
 
-use Cycle\Schema\Generator\Migrations\Tests\Functional\SingleFileStrategyTest as CommonTestCase;
+use Cycle\Schema\Generator\Migrations\Tests\Functional\MultipleFileStrategyTest as CommonTestCase;
 
-final class SingleFileStrategyTest extends CommonTestCase
+final class MultipleFileStrategyTest extends CommonTestCase
 {
     const DRIVER = "postgres";
 }

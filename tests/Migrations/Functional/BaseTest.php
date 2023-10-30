@@ -196,7 +196,7 @@ abstract class BaseTest extends TestCase
             new RenderRelations(),
             new MergeIndexes($reader),
             new GenerateTypecast(),
-            new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG)),
+            $this->getGenerateMigrations()
         ]);
 
         $tables = [];
@@ -413,5 +413,10 @@ abstract class BaseTest extends TestCase
 
 
         return "Table '{$table}' not synced, no idea why, add more messages :P";
+    }
+
+    protected function getGenerateMigrations(): GenerateMigrations
+    {
+        return new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG));
     }
 }
