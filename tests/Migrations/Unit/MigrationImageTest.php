@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests\Unit;
 
+use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Schema\Generator\Migrations\MigrationImage;
 use PHPUnit\Framework\TestCase;
-use Cycle\Migrations\Config\MigrationConfig;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
 

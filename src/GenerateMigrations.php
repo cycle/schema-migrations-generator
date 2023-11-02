@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations;
 
+use Cycle\Schema\Generator\Migrations\Exception\GeneratorException;
+use Cycle\Schema\Generator\Migrations\Strategy\GeneratorStrategyInterface;
+use Cycle\Schema\Generator\Migrations\Strategy\SingleFileStrategy;
 use Cycle\Schema\Generator\SyncTables;
 use Cycle\Schema\GeneratorInterface;
 use Cycle\Schema\Registry;
 use Cycle\Database\Schema\AbstractTable;
-use Cycle\Migrations\Atomizer\Atomizer;
-use Cycle\Migrations\Atomizer\Renderer;
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Migrations\RepositoryInterface;
 
@@ -19,12 +20,17 @@ use Cycle\Migrations\RepositoryInterface;
  */
 class GenerateMigrations implements GeneratorInterface
 {
-    private static int $sec = 0;
+    private GeneratorStrategyInterface $strategy;
 
+    /**
+     * @param MigrationConfig $migrationConfig deprecated param since v2.2.0.
+     */
     public function __construct(
         private RepositoryInterface $repository,
-        private MigrationConfig $migrationConfig
+        private MigrationConfig $migrationConfig,
+        GeneratorStrategyInterface $strategy = null
     ) {
+        $this->strategy = $strategy ?? new SingleFileStrategy($migrationConfig, new NameBasedOnChangesGenerator());
     }
 
     public function run(Registry $registry): Registry
@@ -37,15 +43,12 @@ class GenerateMigrations implements GeneratorInterface
         }
 
         foreach ($databases as $database => $tables) {
-            $image = $this->generate($database, $tables);
-            if (!$image) {
-                // no changes
-                continue;
-            }
-            $class = $image->getClass()->getName();
-            $name = substr($image->buildFileName(), 0, 128);
+            foreach ($this->strategy->generate($database, $tables) as $image) {
+                $class = $image->getClass()->getName();
+                $name = \substr($image->buildFileName(), 0, 128);
 
-            $this->repository->registerMigration($name, $class, (string) $image->getFile());
+                $this->repository->registerMigration($name, $class, (string) $image->getFile());
+            }
         }
 
         return $registry;
@@ -55,94 +58,17 @@ class GenerateMigrations implements GeneratorInterface
      * @param AbstractTable[] $tables
      *
      * @return array [string, FileDeclaration]
+     *
+     * @deprecated since v2.2.0
      */
     protected function generate(string $database, array $tables): ?MigrationImage
     {
-        $atomizer = new Atomizer(new Renderer());
-
-        $reasonable = false;
-        foreach ($tables as $table) {
-            if ($table->getComparator()->hasChanges()) {
-                $reasonable = true;
-                $atomizer->addTable($table);
-            }
+        if (!$this->strategy instanceof SingleFileStrategy) {
+            throw new GeneratorException('Only `SingleFileStrategy` is supported.');
         }
 
-        if (!$reasonable) {
-            return null;
-        }
+        $images = $this->strategy->generate($database, $tables);
 
-        $image = new MigrationImage($this->migrationConfig, $database);
-        $image->setName($this->generateName($atomizer));
-        $image->fileNamePattern = self::$sec++ . '_{database}_{name}';
-
-        $atomizer->declareChanges($image->getClass()->getMethod('up'));
-        $atomizer->revertChanges($image->getClass()->getMethod('down'));
-
-        return $image;
-    }
-
-    private function generateName(Atomizer $atomizer): string
-    {
-        $name = [];
-
-        foreach ($atomizer->getTables() as $table) {
-            if ($table->getStatus() === AbstractTable::STATUS_NEW) {
-                $name[] = 'create_' . $table->getName();
-                continue;
-            }
-
-            if ($table->getStatus() === AbstractTable::STATUS_DECLARED_DROPPED) {
-                $name[] = 'drop_' . $table->getName();
-                continue;
-            }
-
-            if ($table->getComparator()->isRenamed()) {
-                $name[] = 'rename_' . $table->getInitialName();
-                continue;
-            }
-
-            $name[] = 'change_' . $table->getName();
-
-            $comparator = $table->getComparator();
-
-            foreach ($comparator->addedColumns() as $column) {
-                $name[] = 'add_' . $column->getName();
-            }
-
-            foreach ($comparator->droppedColumns() as $column) {
-                $name[] = 'rm_' . $column->getName();
-            }
-
-            foreach ($comparator->alteredColumns() as $column) {
-                $name[] = 'alter_' . $column[0]->getName();
-            }
-
-            foreach ($comparator->addedIndexes() as $index) {
-                $name[] = 'add_index_' . $index->getName();
-            }
-
-            foreach ($comparator->droppedIndexes() as $index) {
-                $name[] = 'rm_index_' . $index->getName();
-            }
-
-            foreach ($comparator->alteredIndexes() as $index) {
-                $name[] = 'alter_index_' . $index[0]->getName();
-            }
-
-            foreach ($comparator->addedForeignKeys() as $fk) {
-                $name[] = 'add_fk_' . $fk->getName();
-            }
-
-            foreach ($comparator->droppedForeignKeys() as $fk) {
-                $name[] = 'rm_fk_' . $fk->getName();
-            }
-
-            foreach ($comparator->alteredForeignKeys() as $fk) {
-                $name[] = 'alter_fk_' . $fk[0]->getName();
-            }
-        }
-
-        return implode('_', $name);
+        return \array_shift($images);
     }
 }

@@ -9,13 +9,21 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
 
 use Cycle\Annotated\Entities;
 use Cycle\Annotated\MergeColumns;
 use Cycle\Annotated\MergeIndexes;
+use Cycle\Database\Config\DatabaseConfig;
+use Cycle\Database\Database;
+use Cycle\Database\DatabaseManager;
 use Cycle\Database\Driver\DriverInterface;
-use Cycle\Schema\Generator\Migrations\GenerateMigrations;
+use Cycle\Database\Driver\Handler;
+use Cycle\Database\Schema\AbstractTable;
+use Cycle\Database\Schema\Comparator;
+use Cycle\Migrations\Config\MigrationConfig;
+use Cycle\Migrations\FileRepository;
+use Cycle\Migrations\Migrator;
 use Cycle\ORM\Config\RelationConfig;
 use Cycle\ORM\Factory;
 use Cycle\ORM\ORM;
@@ -23,6 +31,8 @@ use Cycle\ORM\SchemaInterface;
 use Cycle\Schema\Compiler;
 use Cycle\Schema\Generator\GenerateRelations;
 use Cycle\Schema\Generator\GenerateTypecast;
+use Cycle\Schema\Generator\Migrations\GenerateMigrations;
+use Cycle\Schema\Generator\Migrations\Tests\TestLogger;
 use Cycle\Schema\Generator\RenderRelations;
 use Cycle\Schema\Generator\RenderTables;
 use Cycle\Schema\Generator\ResetTables;
@@ -32,16 +42,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Spiral\Attributes\AttributeReader;
 use Spiral\Core\Container;
-use Cycle\Database\Config\DatabaseConfig;
-use Cycle\Database\Database;
-use Cycle\Database\DatabaseManager;
-use Cycle\Database\Driver\Handler;
-use Cycle\Database\Schema\AbstractTable;
-use Cycle\Database\Schema\Comparator;
 use Spiral\Files\Files;
-use Cycle\Migrations\Config\MigrationConfig;
-use Cycle\Migrations\FileRepository;
-use Cycle\Migrations\Migrator;
 use Spiral\Tokenizer\ClassesInterface;
 use Spiral\Tokenizer\Config\TokenizerConfig;
 use Spiral\Tokenizer\Tokenizer;
@@ -52,7 +53,7 @@ abstract class BaseTest extends TestCase
     public const DRIVER = null;
 
     public const CONFIG = [
-        'directory' => __DIR__ . '/../files/',
+        'directory' => __DIR__ . '/../../files/',
         'table' => 'migrations',
         'safe' => true,
         'namespace' => 'Migration',
@@ -139,7 +140,7 @@ abstract class BaseTest extends TestCase
     public function tearDown(): void
     {
         $files = new Files();
-        foreach ($files->getFiles(__DIR__ . '/../files/', '*.php') as $file) {
+        foreach ($files->getFiles(\dirname(__DIR__, 2) . '/files', '*.php') as $file) {
             $files->delete($file);
             clearstatcache(true, $file);
         }
@@ -195,7 +196,7 @@ abstract class BaseTest extends TestCase
             new RenderRelations(),
             new MergeIndexes($reader),
             new GenerateTypecast(),
-            new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG)),
+            $this->getGenerateMigrations(),
         ]);
 
         $tables = [];
@@ -412,5 +413,10 @@ abstract class BaseTest extends TestCase
 
 
         return "Table '{$table}' not synced, no idea why, add more messages :P";
+    }
+
+    protected function getGenerateMigrations(): GenerateMigrations
+    {
+        return new GenerateMigrations($this->migrator->getRepository(), new MigrationConfig(static::CONFIG));
     }
 }

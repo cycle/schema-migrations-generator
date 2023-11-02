@@ -9,6 +9,7 @@
 
 declare(strict_types=1);
 
+use Cycle\Schema\Generator\Migrations\Tests\Functional\BaseTest;
 use Spiral\Tokenizer;
 
 error_reporting(E_ALL | E_STRICT);
@@ -24,35 +25,35 @@ $tokenizer = new Tokenizer\Tokenizer(new Tokenizer\Config\TokenizerConfig([
 
 $databases = [
     'sqlite' => [
-        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLite',
-        'directory' => __DIR__ . '/Migrations/Driver/SQLite/',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Functional\Driver\SQLite',
+        'directory' => __DIR__ . '/Migrations/Functional/Driver/SQLite/',
     ],
     'mysql' => [
-        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\MySQL',
-        'directory' => __DIR__ . '/Migrations/Driver/MySQL/',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Functional\Driver\MySQL',
+        'directory' => __DIR__ . '/Migrations/Functional/Driver/MySQL/',
     ],
     'postgres' => [
-        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\Postgres',
-        'directory' => __DIR__ . '/Migrations/Driver/Postgres/',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Functional\Driver\Postgres',
+        'directory' => __DIR__ . '/Migrations/Functional/Driver/Postgres/',
     ],
     'sqlserver' => [
-        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Driver\SQLServer',
-        'directory' => __DIR__ . '/Migrations/Driver/SQLServer/',
+        'namespace' => 'Cycle\Schema\Generator\Migrations\Tests\Functional\Driver\SQLServer',
+        'directory' => __DIR__ . '/Migrations/Functional/Driver/SQLServer/',
     ],
 ];
 
 echo "Generating test classes for all database types...\n";
 
-$classes = $tokenizer->classLocator()->getClasses(\Cycle\Schema\Generator\Migrations\Tests\BaseTest::class);
+$classes = $tokenizer->classLocator()->getClasses(BaseTest::class);
 
 foreach ($classes as $class) {
-    if (!$class->isAbstract() || $class->getName() == \Cycle\Schema\Generator\Migrations\Tests\BaseTest::class) {
+    if (!$class->isAbstract() || $class->getName() === BaseTest::class) {
         continue;
     }
 
     echo "Found {$class->getName()}\n";
     foreach ($databases as $driver => $details) {
-        $filename = sprintf('%s/%s.php', $details['directory'], $class->getShortName());
+        $filename = \sprintf('%s/%s.php', $details['directory'], $class->getShortName());
 
         file_put_contents(
             $filename,
@@ -67,13 +68,15 @@ foreach ($classes as $class) {
 
 namespace %s;
 
-class %s extends \%s
+use %s as CommonTestCase;
+
+final class %s extends CommonTestCase
 {
     const DRIVER = "%s";
 }',
                 $details['namespace'],
-                $class->getShortName(),
                 $class->getName(),
+                $class->getShortName(),
                 $driver
             )
         );

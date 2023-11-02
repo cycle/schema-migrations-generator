@@ -12,11 +12,12 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', '1');
 
 use Cycle\Database\Config;
+use Cycle\Schema\Generator\Migrations\Tests\Functional\BaseTest;
 
 //Composer
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-\Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
+BaseTest::$config = [
     'debug' => false,
     'strict' => true,
     'benchmark' => false,
@@ -59,7 +60,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 if (!empty(getenv('DB'))) {
     switch (getenv('DB')) {
         case 'mariadb':
-            \Cycle\Schema\Generator\Migrations\Tests\BaseTest::$config = [
+            BaseTest::$config = [
                 'debug' => false,
                 'mysql' => new Config\MySQLDriverConfig(
                     connection: new Config\MySQL\TcpConnectionConfig(

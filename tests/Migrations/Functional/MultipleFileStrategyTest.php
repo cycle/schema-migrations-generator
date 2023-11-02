@@ -9,15 +9,20 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
 
-abstract class ReflectTest extends BaseTest
+use Cycle\Migrations\Config\MigrationConfig;
+use Cycle\Schema\Generator\Migrations\GenerateMigrations;
+use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
+use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
+
+abstract class MultipleFileStrategyTest extends BaseTest
 {
     public function testInit(): void
     {
         $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        $this->assertCount(3, $this->migrator->getMigrations());
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -29,22 +34,22 @@ abstract class ReflectTest extends BaseTest
 
     public function testNoChanges(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        $this->assertCount(3, $this->migrator->getMigrations());
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
-        $this->assertCount(2, $this->migrator->getMigrations());
+        $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->assertCount(3, $this->migrator->getMigrations());
     }
 
     public function testAlter(): void
     {
         $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        $this->assertCount(3, $this->migrator->getMigrations());
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -55,7 +60,7 @@ abstract class ReflectTest extends BaseTest
 
         $tables = $this->migrate(__DIR__ . '/Fixtures/Alter');
 
-        $this->assertCount(4, $this->migrator->getMigrations());
+        $this->assertCount(6, $this->migrator->getMigrations());
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -63,5 +68,16 @@ abstract class ReflectTest extends BaseTest
         foreach ($tables as $t) {
             $this->assertSameAsInDB($t);
         }
+    }
+
+    protected function getGenerateMigrations(): GenerateMigrations
+    {
+        $config = new MigrationConfig(static::CONFIG);
+
+        return new GenerateMigrations(
+            $this->migrator->getRepository(),
+            $config,
+            new MultipleFilesStrategy($config, new NameBasedOnChangesGenerator())
+        );
     }
 }

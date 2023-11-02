@@ -7,7 +7,7 @@
         "php": ">=8.1",
         "cycle/database": "^2.4.1",
         "cycle/schema-builder": "^2.0",
-        "cycle/migrations": "^4.0"
+        "cycle/migrations": "^4.2"
     },
     "require-dev": {
         "cycle/orm": "^2.0",
