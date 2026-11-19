@@ -45,7 +45,7 @@ jobs:
           dependency-versions: ${{ matrix.dependencies }}
 
       - name: Execute Tests
-        run: vendor/bin/phpunit --exclude-group driver-mysql,driver-postgres,driver-sqlserver --coverage-clover=coverage.clover
+        run: vendor/bin/phpunit --exclude-group driver-mysql --exclude-group driver-postgres --exclude-group driver-sqlserver --coverage-clover=coverage.clover
 
       - name: Upload coverage to Codecov
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'
