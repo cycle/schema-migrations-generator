@@ -2,6 +2,8 @@
 !/.github/
 /runtime/
 /vendor/
+/vendor-bin/*/vendor/
+/vendor-bin/*/composer.lock
 .env
 composer.lock
 *.db
