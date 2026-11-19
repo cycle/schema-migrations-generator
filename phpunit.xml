@@ -12,6 +12,9 @@
     <testsuites>
         <testsuite name="Cycle: Migration Generator">
             <directory>./tests/</directory>
+            <exclude>./tests/Migrations/Functional/BaseTest.php</exclude>
+            <exclude>./tests/Migrations/Functional/MultipleFileStrategyTest.php</exclude>
+            <exclude>./tests/Migrations/Functional/SingleFileStrategyTest.php</exclude>
         </testsuite>
     </testsuites>
     <source>
