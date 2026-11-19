@@ -1,25 +1,52 @@
-# Cycle ORM - Migration Generator
+<div align="center">
+    <a href="https://cycle-orm.dev" target="_blank">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="https://github.com/cycle/.github/blob/main/logo/words-vector-dark.svg?raw=true">
+            <img width="50%" align="center" src="https://github.com/cycle/.github/blob/main/logo/words-vector-light.svg?raw=true" alt="CycleORM Logo">
+        </picture>
+    </a>
+</div>
 
-[![Latest Stable Version](https://poser.pugx.org/cycle/schema-migrations-generator/version)](https://packagist.org/packages/cycle/schema-migrations-generator)
-[![Build Status](https://github.com/cycle/schema-migrations-generator/workflows/build/badge.svg)](https://github.com/cycle/schema-migrations-generator/actions)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/cycle/schema-migrations-generator/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/cycle/schema-migrations-generator/?branch=2.x)
-[![Codecov](https://codecov.io/gh/cycle/schema-migrations-generator/graph/badge.svg)](https://codecov.io/gh/cycle/schema-migrations-generator)
+<p align="center">Migration generator for Cycle ORM</p>
 
-By migration generator package you can automatically generate a set of migration files for Cycle ORM during schema
-compilation. In this case, you have the freedom to alter such migrations manually before running them.
+<div align="center">
 
-## Installation
+[![Documentation](https://img.shields.io/badge/Documentation-blue?style=for-the-badge&logo=gitbook&logoColor=white)](https://cycle-orm.dev/docs/database-migrations/current/en)
+[![Sponsor](https://img.shields.io/static/v1?style=for-the-badge&label=&message=Sponsor&logo=githubsponsors&logoColor=white&color=%23EA4AAA)](https://github.com/sponsors/cycle)
+
+[![Psalm Level](https://shepherd.dev/github/cycle/schema-migrations-generator/level.svg)](https://shepherd.dev/github/cycle/schema-migrations-generator)
+[![Type Coverage](https://shepherd.dev/github/cycle/schema-migrations-generator/coverage.svg)](https://shepherd.dev/github/cycle/schema-migrations-generator)
+[![Codecov](https://codecov.io/gh/cycle/schema-migrations-generator/branch/2.x/graph/badge.svg)](https://codecov.io/gh/cycle/schema-migrations-generator)
+[![Discord](https://img.shields.io/discord/538114875570913290?style=flat-square&logo=discord&labelColor=7289d9&logoColor=white&color=39456d)](https://discord.gg/spiralphp)
+
+</div>
+
+<br />
+
+The migration generator creates a set of migration files for Cycle ORM during schema compilation. You can edit the generated migrations by hand before running them.
+
+## Get Started
+
+### Requirements
+
+- PHP 8.2+
+
+### Installation
 
 ```bash
 composer require cycle/schema-migrations-generator
 ```
 
-## Configuration
+[![PHP](https://img.shields.io/packagist/php-v/cycle/schema-migrations-generator.svg?style=flat-square&logo=php)](https://packagist.org/packages/cycle/schema-migrations-generator)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/cycle/schema-migrations-generator.svg?style=flat-square&logo=packagist)](https://packagist.org/packages/cycle/schema-migrations-generator)
+[![License](https://img.shields.io/packagist/l/cycle/schema-migrations-generator.svg?style=flat-square)](LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/cycle/schema-migrations-generator.svg?style=flat-square)](https://packagist.org/packages/cycle/schema-migrations-generator/stats)
+
+### Configuration
 
 ```php
 use Cycle\Migrations;
 use Cycle\Schema\Registry;
-use Cycle\Schema\Definition\Entity;
 use Cycle\Database;
 use Cycle\Database\Config;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
@@ -39,8 +66,13 @@ $dbal = new Database\DatabaseManager(new Config\DatabaseConfig([
     ]
 ]));
 
+$config = new Migrations\Config\MigrationConfig([
+    'directory' => __DIR__ . '/migrations/',
+    'table' => 'migrations',
+]);
+
 $migrator = new Migrations\Migrator(
-    $config, 
+    $config,
     $dbal, 
     new Migrations\FileRepository($config)
 );
@@ -49,22 +81,15 @@ $registry = new Registry($dbal);
 $registry->register(....);
 
 $generator = new GenerateMigrations(
-    $migrator->getRepository(), 
+    $migrator->getRepository(),
     $migrator->getConfig()
 );
 ```
 
-## Running
+### Running
 
-Migration generator creates set of migrations needed to sync database schema with desired state. Each database will
-receive its own migration.
+The generator creates the migrations needed to sync the database schema with the desired state. Each database receives its own migration.
 
 ```php
 $generator->run($registry);
 ```
-
-## License:
-
-The MIT License (MIT). Please see [`LICENSE`](./LICENSE) for more information. Maintained
-by [Spiral Scout](https://spiralscout.com).
-
