@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="7.11.0@9e0d0f88bc0a4233357a9aeb4b32da060644e196">
   <file src="src/Changes/Collector.php">
     <MixedArrayAccess>
       <code><![CDATA[$column[0]]]></code>
@@ -21,6 +21,11 @@
       <code><![CDATA[array<array{ChangeType, non-empty-string}>]]></code>
     </MixedReturnTypeCoercion>
   </file>
+  <file src="src/ChangesCountNameGenerator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function generate(Atomizer $atomizer): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
   <file src="src/GenerateMigrations.php">
     <ArgumentTypeCoercion>
       <code><![CDATA[$database]]></code>
@@ -28,9 +33,9 @@
     <MismatchingDocblockReturnType>
       <code><![CDATA[array]]></code>
     </MismatchingDocblockReturnType>
-    <MixedInferredReturnType>
-      <code><![CDATA[array]]></code>
-    </MixedInferredReturnType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function run(Registry $registry): Registry]]></code>
+    </MissingOverrideAttribute>
     <PossiblyNullArgument>
       <code><![CDATA[$class]]></code>
     </PossiblyNullArgument>
@@ -42,8 +47,29 @@
     <InvalidNullableReturnType>
       <code><![CDATA[string]]></code>
     </InvalidNullableReturnType>
+    <InvalidOperand>
+      <code><![CDATA[microtime(true)]]></code>
+    </InvalidOperand>
     <NullableReturnStatement>
       <code><![CDATA[$this->database]]></code>
     </NullableReturnStatement>
+    <WeakHash>
+      <code><![CDATA[md5(microtime(true) . microtime(false))]]></code>
+    </WeakHash>
+  </file>
+  <file src="src/NameBasedOnChangesGenerator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function generate(Atomizer $atomizer): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Strategy/MultipleFilesStrategy.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function generate(string $database, array $tables): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Strategy/SingleFileStrategy.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function generate(string $database, array $tables): array]]></code>
+    </MissingOverrideAttribute>
   </file>
 </files>

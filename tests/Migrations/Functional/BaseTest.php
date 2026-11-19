@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
 
 use Cycle\Annotated\Entities;
+use Cycle\Annotated\Locator\TokenizerEntityLocator;
 use Cycle\Annotated\MergeColumns;
 use Cycle\Annotated\MergeIndexes;
 use Cycle\Database\Config\DatabaseConfig;
@@ -186,7 +187,7 @@ abstract class BaseTest extends TestCase
         $r = new Registry($this->dbal);
 
         (new Compiler())->compile($r, [
-            new Entities($locator, $reader),
+            new Entities(new TokenizerEntityLocator($locator, $reader), $reader),
             new ResetTables(),
             new MergeColumns($reader),
             new GenerateRelations(),

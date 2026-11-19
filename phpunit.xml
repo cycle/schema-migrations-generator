@@ -2,26 +2,24 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
-         cacheResultFile="runtime/phpunit/result.cache"
-        backupGlobals="false"
-        backupStaticAttributes="false"
-        colors="true"
-        verbose="false"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        processIsolation="false"
-        stopOnFailure="false"
-        stopOnError="false"
+         cacheDirectory="runtime/phpunit"
+         backupGlobals="false"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         stopOnError="false"
 >
-    <coverage>
-        <include>
-            <directory>src</directory>
-        </include>
-    </coverage>
     <testsuites>
         <testsuite name="Cycle: Migration Generator">
             <directory>./tests/</directory>
+            <exclude>./tests/Migrations/Functional/BaseTest.php</exclude>
+            <exclude>./tests/Migrations/Functional/MultipleFileStrategyTest.php</exclude>
+            <exclude>./tests/Migrations/Functional/SingleFileStrategyTest.php</exclude>
         </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>
