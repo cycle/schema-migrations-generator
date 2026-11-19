@@ -17,7 +17,7 @@ class MigrationImageTest extends TestCase
     protected MigrationImage $migrationImage;
     protected static MigrationConfig $defaultMigrationConfig;
 
-    public function databaseData(): array
+    public static function databaseData(): array
     {
         return [
             ['Default'],
@@ -26,7 +26,7 @@ class MigrationImageTest extends TestCase
         ];
     }
 
-    public function migrationNameData(): array
+    public static function migrationNameData(): array
     {
         return [
             ['simple'],

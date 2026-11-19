@@ -16,18 +16,20 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
-        "cycle/database": "^2.11.3",
-        "cycle/schema-builder": "^2.11.1",
-        "cycle/migrations": "^4.2.4"
+        "php": ">=8.2",
+        "cycle/database": "^2.23",
+        "cycle/schema-builder": "^2.12",
+        "cycle/migrations": "^4.3"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
-        "cycle/annotated": "^3.5",
-        "cycle/orm": "^2.9.1",
-        "phpunit/phpunit": "^9.6.22",
-        "spiral/dumper": "^3.3.1",
-        "spiral/framework": "^3.14.8"
+        "cycle/annotated": "^4.6",
+        "cycle/orm": "^2.18",
+        "phpunit/phpunit": "^11.5",
+        "spiral/attributes": "^3.1.8",
+        "spiral/core": "^3.18",
+        "spiral/files": "^3.18",
+        "spiral/tokenizer": "^3.18"
     },
     "autoload": {
         "psr-4": {
@@ -42,8 +44,7 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "bamarni/composer-bin-plugin": true,
-            "spiral/composer-publish-plugin": false
+            "bamarni/composer-bin-plugin": true
         }
     },
     "minimum-stability": "dev",
