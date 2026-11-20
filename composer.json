@@ -26,14 +26,25 @@
         "buggregator/trap": "^1.20",
         "cycle/annotated": "^4.6",
         "cycle/orm": "^2.18",
+        "cycle/testing": "1.x-dev",
         "llm/skills": "^1.20",
         "phpunit/phpunit": "^11.5",
         "roxblnfk/unpoly": "^1.8",
         "spiral/attributes": "^3.1.8",
         "spiral/core": "^3.18",
         "spiral/files": "^3.18",
-        "spiral/tokenizer": "^3.18"
+        "spiral/tokenizer": "^3.18",
+        "testo/testo": "^0.10.60"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../testing",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Cycle\\Schema\\Generator\\Migrations\\": "src/"
