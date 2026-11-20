@@ -46,7 +46,6 @@ jobs:
           extensions: mbstring, pdo, sqlsrv, pdo_sqlsrv
 
       - name: Install Composer dependencies
-        # TODO(cycle/testing): switch to the released package
         uses: ramsey/composer-install@v4
         with:
           dependency-versions: ${{ matrix.dependencies }}
