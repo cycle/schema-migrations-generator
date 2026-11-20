@@ -44,7 +44,7 @@ final class MigrationImageTest
     {
         $class = $this->migrationImage->getClass();
         $constValue = $class->getConstant('DATABASE')->getValue();
-        Assert::equals($constValue, static::DATABASE_DEFAULT, 'Check the DATABASE constant');
+        Assert::equals($constValue, self::DATABASE_DEFAULT, 'Check the DATABASE constant');
         Assert::false(empty($class->getName()), 'Class name is not empty');
 
         // check `up` and `down` methods
@@ -79,7 +79,7 @@ final class MigrationImageTest
 
     public function testGetMigrationConfig(): void
     {
-        Assert::equals($this->migrationImage->getMigrationConfig(), static::$defaultMigrationConfig);
+        Assert::equals($this->migrationImage->getMigrationConfig(), self::$defaultMigrationConfig);
     }
 
     public function testGetClass(): void
@@ -94,7 +94,7 @@ final class MigrationImageTest
 
     public function testBuildFileName(): void
     {
-        $this->substringInFileName(static::DATABASE_DEFAULT, '{database}', 'Default database name in the filename');
+        $this->substringInFileName(self::DATABASE_DEFAULT, '{database}', 'Default database name in the filename');
 
         $this->migrationImage->fileNamePattern = '';
         Assert::equals($this->migrationImage->buildFileName(), '', 'Empty pattern');
@@ -124,13 +124,13 @@ final class MigrationImageTest
     #[BeforeClass]
     public static function setUpBeforeClass(): void
     {
-        static::$defaultMigrationConfig = new MigrationConfig();
+        self::$defaultMigrationConfig = new MigrationConfig();
     }
 
     #[BeforeTest]
     public function setUp(): void
     {
-        $this->migrationImage = new MigrationImage(static::$defaultMigrationConfig, static::DATABASE_DEFAULT);
+        $this->migrationImage = new MigrationImage(self::$defaultMigrationConfig, self::DATABASE_DEFAULT);
     }
 
     protected function substringInFileName(string $substr, ?string $pattern = null, string $message = ''): void
