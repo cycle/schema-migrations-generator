@@ -13,15 +13,17 @@ namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 
 use Cycle\Schema\Generator\Migrations\Tests\GeneratorTestCase;
 use Cycle\Testing\Database\Assert\SchemaAssert;
+use Testo\Assert;
+use Testo\Test;
 
 final class SingleFileStrategyTest extends GeneratorTestCase
 {
-    #[\Testo\Test]
+    #[Test]
     public function testInit(): void
     {
         $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 2);
+        Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -31,26 +33,26 @@ final class SingleFileStrategyTest extends GeneratorTestCase
         }
     }
 
-    #[\Testo\Test]
+    #[Test]
     public function testNoChanges(): void
     {
         $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 2);
+        Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         $this->migrate(self::FIXTURES . 'Init');
-        \Testo\Assert::count($this->migrator->getMigrations(), 2);
+        Assert::count($this->migrator->getMigrations(), 2);
     }
 
-    #[\Testo\Test]
+    #[Test]
     public function testAlter(): void
     {
         $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 2);
+        Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -61,7 +63,7 @@ final class SingleFileStrategyTest extends GeneratorTestCase
 
         $tables = $this->migrate(self::FIXTURES . 'Alter');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 4);
+        Assert::count($this->migrator->getMigrations(), 4);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }

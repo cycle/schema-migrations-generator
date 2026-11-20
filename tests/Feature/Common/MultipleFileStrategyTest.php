@@ -11,21 +11,22 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 
-use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
 use Cycle\Schema\Generator\Migrations\Tests\GeneratorTestCase;
 use Cycle\Testing\Database\Assert\SchemaAssert;
+use Testo\Assert;
+use Testo\Test;
 
 final class MultipleFileStrategyTest extends GeneratorTestCase
 {
-    #[\Testo\Test]
+    #[Test]
     public function testInit(): void
     {
         $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 3);
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -35,26 +36,26 @@ final class MultipleFileStrategyTest extends GeneratorTestCase
         }
     }
 
-    #[\Testo\Test]
+    #[Test]
     public function testNoChanges(): void
     {
         $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 3);
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         $this->migrate(self::FIXTURES . 'Init');
-        \Testo\Assert::count($this->migrator->getMigrations(), 3);
+        Assert::count($this->migrator->getMigrations(), 3);
     }
 
-    #[\Testo\Test]
+    #[Test]
     public function testAlter(): void
     {
         $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 3);
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -65,7 +66,7 @@ final class MultipleFileStrategyTest extends GeneratorTestCase
 
         $tables = $this->migrate(self::FIXTURES . 'Alter');
 
-        \Testo\Assert::count($this->migrator->getMigrations(), 6);
+        Assert::count($this->migrator->getMigrations(), 6);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
