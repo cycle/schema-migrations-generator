@@ -10,21 +10,23 @@ use Cycle\Schema\Generator\Migrations\Exception\GeneratorException;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameGeneratorInterface;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
-use PHPUnit\Framework\TestCase;
+use Testo\Expect;
+use Testo\Test;
 
-final class GenerateMigrationsTest extends TestCase
+#[Test]
+final class GenerateMigrationsTest
 {
     public function testGenerateException(): void
     {
         $generator = new GenerateMigrations(
-            $this->createMock(RepositoryInterface::class),
+            \Mockery::mock(RepositoryInterface::class)->shouldIgnoreMissing(),
             new MigrationConfig(),
-            new MultipleFilesStrategy(new MigrationConfig(), $this->createMock(NameGeneratorInterface::class)),
+            new MultipleFilesStrategy(new MigrationConfig(), \Mockery::mock(NameGeneratorInterface::class)->shouldIgnoreMissing()),
         );
 
         $ref = new \ReflectionMethod($generator, 'generate');
 
-        $this->expectException(GeneratorException::class);
+        Expect::exception(GeneratorException::class);
         $ref->invoke($generator, 'test', []);
     }
 }

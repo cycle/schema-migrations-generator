@@ -9,18 +9,19 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests\Functional\Fixtures\Init;
+namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Init;
 
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
-use Cycle\Annotated\Annotation\Relation\BelongsTo;
+use Cycle\Annotated\Annotation\Table\Index;
 
 #[Entity]
-class Post
+#[Index(columns: ['email'], unique: true)]
+class User
 {
     #[Column(type: 'primary')]
     protected int $id;
 
-    #[BelongsTo(target: User::class, nullable: false)]
-    protected User $user;
+    #[Column(type: 'string')]
+    protected $email;
 }

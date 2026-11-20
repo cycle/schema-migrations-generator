@@ -9,70 +9,76 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
+namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 
-use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
+use Cycle\Schema\Generator\Migrations\Tests\Support\GeneratorTestCase;
+use Cycle\Testing\Database\Assert\SchemaAssert;
+use Testo\Assert;
+use Testo\Test;
 
-abstract class MultipleFileStrategyTest extends BaseTest
+final class MultipleFileStrategyTest extends GeneratorTestCase
 {
+    #[Test]
     public function testInit(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        $this->assertCount(3, $this->migrator->getMigrations());
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
     }
 
+    #[Test]
     public function testNoChanges(): void
     {
-        $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(self::FIXTURES . 'Init');
 
-        $this->assertCount(3, $this->migrator->getMigrations());
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
-        $this->migrate(__DIR__ . '/Fixtures/Init');
-        $this->assertCount(3, $this->migrator->getMigrations());
+        $this->migrate(self::FIXTURES . 'Init');
+        Assert::count($this->migrator->getMigrations(), 3);
     }
 
+    #[Test]
     public function testAlter(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $tables = $this->migrate(self::FIXTURES . 'Init');
 
-        $this->assertCount(3, $this->migrator->getMigrations());
+        Assert::count($this->migrator->getMigrations(), 3);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
 
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Alter');
+        $tables = $this->migrate(self::FIXTURES . 'Alter');
 
-        $this->assertCount(6, $this->migrator->getMigrations());
+        Assert::count($this->migrator->getMigrations(), 6);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
     }
 
     protected function getGenerateMigrations(): GenerateMigrations
     {
-        $config = new MigrationConfig(static::CONFIG);
+        $config = $this->migrator->getConfig();
 
         return new GenerateMigrations(
             $this->migrator->getRepository(),
