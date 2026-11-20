@@ -1,11 +1,7 @@
-/.*
+/.*/
 !/.github/
 /runtime/
 /vendor/
-/vendor-bin/*/vendor/
-/vendor-bin/*/composer.lock
-.env
-composer.lock
-*.db
-clover.xml
-docker-compose.override.yml
+/composer.lock
+/.env
+*.log
