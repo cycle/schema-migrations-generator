@@ -40,12 +40,16 @@ jobs:
           extensions: mbstring, pdo, pdo_sqlite
 
       - name: Install Composer dependencies
+        # TODO(cycle/testing): switch to the released package
         uses: ramsey/composer-install@v4
         with:
           dependency-versions: ${{ matrix.dependencies }}
 
       - name: Execute Tests
-        run: vendor/bin/phpunit --exclude-group driver-mysql --exclude-group driver-postgres --exclude-group driver-sqlserver --coverage-clover=coverage.clover
+        env:
+          DB_DRIVERS: sqlite
+          DB_REQUIRED: 1
+        run: composer test -- --coverage-clover=coverage.clover
 
       - name: Upload coverage to Codecov
         if: matrix.php == '8.4' && matrix.dependencies == 'highest'
