@@ -17,81 +17,79 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Cycle\Schema\Generator\Migrations\ChangesCountNameGenerator
  */
-final class ChangesCountTest extends TestCase
+final class ChangesCountTest
 {
     /**
      * @covers ::generate
      */
+    #[\Testo\Test]
     public function testGenerate(): void
     {
         $atomizer = new Atomizer(
-            $this->createMock(RendererInterface::class),
+            \Mockery::mock(RendererInterface::class)->shouldIgnoreMissing(),
         );
 
-        $create = $this->createMock(AbstractTable::class);
-        $create->method('getName')->willReturn('creates');
-        $create->method('getStatus')->willReturn(AbstractTable::STATUS_NEW);
+        $create = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $create->shouldReceive('getName')->andReturn('creates');
+        $create->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_NEW);
 
-        $drops = $this->createMock(AbstractTable::class);
-        $drops->method('getName')->willReturn('drops');
-        $drops->method('getStatus')->willReturn(AbstractTable::STATUS_DECLARED_DROPPED);
+        $drops = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $drops->shouldReceive('getName')->andReturn('drops');
+        $drops->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_DECLARED_DROPPED);
 
-        $renamesCmp = $this->createMock(ComparatorInterface::class);
-        $renamesCmp->method('isRenamed')->willReturn(true);
-        $renames = $this->createMock(AbstractTable::class);
-        $renames->method('getName')->willReturn('renames');
-        $renames->method('getStatus')->willReturn(AbstractTable::STATUS_EXISTS);
-        $renames->method('getComparator')->willReturn($renamesCmp);
-        $renames->method('getInitialName')->willReturn('old_name');
+        $renamesCmp = \Mockery::mock(ComparatorInterface::class)->shouldIgnoreMissing();
+        $renamesCmp->shouldReceive('isRenamed')->andReturn(true);
+        $renames = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $renames->shouldReceive('getName')->andReturn('renames');
+        $renames->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_EXISTS);
+        $renames->shouldReceive('getComparator')->andReturn($renamesCmp);
+        $renames->shouldReceive('getInitialName')->andReturn('old_name');
 
         // Comparator
-        $changeCmp = $this->createMock(ComparatorInterface::class);
-        $changeCmp->method('isRenamed')->willReturn(false);
+        $changeCmp = \Mockery::mock(ComparatorInterface::class)->shouldIgnoreMissing();
+        $changeCmp->shouldReceive('isRenamed')->andReturn(false);
         //// Column
-        $columnAdd = $this->createMock(AbstractColumn::class);
-        $columnAdd->method('getName')->willReturn('c1');
-        $columnDrop = $this->createMock(AbstractColumn::class);
-        $columnDrop->method('getName')->willReturn('c2');
-        $columnAlter = $this->createMock(AbstractColumn::class);
-        $columnAlter->method('getName')->willReturn('c3');
-        $changeCmp->method('addedColumns')->willReturn([$columnAdd]);
-        $changeCmp->method('droppedColumns')->willReturn([$columnDrop]);
-        $changeCmp->method('alteredColumns')
-            ->willReturn([
-                [$columnAlter, $this->createMock(AbstractColumn::class)],
-            ]);
+        $columnAdd = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
+        $columnAdd->shouldReceive('getName')->andReturn('c1');
+        $columnDrop = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
+        $columnDrop->shouldReceive('getName')->andReturn('c2');
+        $columnAlter = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
+        $columnAlter->shouldReceive('getName')->andReturn('c3');
+        $changeCmp->shouldReceive('addedColumns')->andReturn([$columnAdd]);
+        $changeCmp->shouldReceive('droppedColumns')->andReturn([$columnDrop]);
+        $changeCmp->shouldReceive('alteredColumns')->andReturn([
+            [$columnAlter, \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing()],
+        ]);
         //// Index
-        $indexAdd = $this->createMock(AbstractIndex::class);
-        $indexAdd->method('getName')->willReturn('i1');
-        $indexDrop = $this->createMock(AbstractIndex::class);
-        $indexDrop->method('getName')->willReturn('i2');
-        $indexAlter = $this->createMock(AbstractIndex::class);
-        $indexAlter->method('getName')->willReturn('i3');
-        $changeCmp->method('addedIndexes')->willReturn([$indexAdd]);
-        $changeCmp->method('droppedIndexes')->willReturn([$indexDrop]);
-        $changeCmp->method('alteredIndexes')
-            ->willReturn([
-                [$indexAlter, $this->createMock(AbstractIndex::class)],
-            ]);
+        $indexAdd = \Mockery::mock(AbstractIndex::class)->shouldIgnoreMissing();
+        $indexAdd->shouldReceive('getName')->andReturn('i1');
+        $indexDrop = \Mockery::mock(AbstractIndex::class)->shouldIgnoreMissing();
+        $indexDrop->shouldReceive('getName')->andReturn('i2');
+        $indexAlter = \Mockery::mock(AbstractIndex::class)->shouldIgnoreMissing();
+        $indexAlter->shouldReceive('getName')->andReturn('i3');
+        $changeCmp->shouldReceive('addedIndexes')->andReturn([$indexAdd]);
+        $changeCmp->shouldReceive('droppedIndexes')->andReturn([$indexDrop]);
+        $changeCmp->shouldReceive('alteredIndexes')->andReturn([
+            [$indexAlter, \Mockery::mock(AbstractIndex::class)->shouldIgnoreMissing()],
+        ]);
         //// FK
-        $fkAdd = $this->createMock(AbstractForeignKey::class);
-        $fkAdd->method('getName')->willReturn('fk1');
-        $fkDrop = $this->createMock(AbstractForeignKey::class);
-        $fkDrop->method('getName')->willReturn('fk2');
-        $fkAlter = $this->createMock(AbstractForeignKey::class);
-        $fkAlter->method('getName')->willReturn('fk3');
-        $changeCmp->method('addedForeignKeys')->willReturn([$fkAdd]);
-        $changeCmp->method('droppedForeignKeys')->willReturn([$fkDrop]);
-        $changeCmp->method('alteredForeignKeys')
-            ->willReturn([
-                [$fkAlter, $this->createMock(AbstractForeignKey::class)],
-            ]);
+        $fkAdd = \Mockery::mock(AbstractForeignKey::class)->shouldIgnoreMissing();
+        $fkAdd->shouldReceive('getName')->andReturn('fk1');
+        $fkDrop = \Mockery::mock(AbstractForeignKey::class)->shouldIgnoreMissing();
+        $fkDrop->shouldReceive('getName')->andReturn('fk2');
+        $fkAlter = \Mockery::mock(AbstractForeignKey::class)->shouldIgnoreMissing();
+        $fkAlter->shouldReceive('getName')->andReturn('fk3');
+        $changeCmp->shouldReceive('addedForeignKeys')->andReturn([$fkAdd]);
+        $changeCmp->shouldReceive('droppedForeignKeys')->andReturn([$fkDrop]);
+        $changeCmp->shouldReceive('alteredForeignKeys')->andReturn([
+            [$fkAlter, \Mockery::mock(AbstractForeignKey::class)->shouldIgnoreMissing()],
+        ]);
 
         // Table
-        $change = $this->createMock(AbstractTable::class);
-        $change->method('getStatus')->willReturn(AbstractTable::STATUS_EXISTS);
-        $renames->method('getName')->willReturn('changes');
-        $change->method('getComparator')->willReturn($changeCmp);
+        $change = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $change->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_EXISTS);
+        $renames->shouldReceive('getName')->andReturn('changes');
+        $change->shouldReceive('getComparator')->andReturn($changeCmp);
 
         $atomizer
             ->addTable($create)
@@ -99,9 +97,6 @@ final class ChangesCountTest extends TestCase
             ->addTable($renames)
             ->addTable($change);
         $generator = new ChangesCountNameGenerator();
-        self::assertSame(
-            'ct1_dt1_t2_c3_i3_fk3',
-            $generator->generate($atomizer),
-        );
+        \Testo\Assert::same($generator->generate($atomizer), 'ct1_dt1_t2_c3_i3_fk3');
     }
 }

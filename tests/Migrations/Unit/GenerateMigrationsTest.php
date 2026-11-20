@@ -12,19 +12,20 @@ use Cycle\Schema\Generator\Migrations\NameGeneratorInterface;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
 use PHPUnit\Framework\TestCase;
 
-final class GenerateMigrationsTest extends TestCase
+final class GenerateMigrationsTest
 {
+    #[\Testo\Test]
     public function testGenerateException(): void
     {
         $generator = new GenerateMigrations(
-            $this->createMock(RepositoryInterface::class),
+            \Mockery::mock(RepositoryInterface::class)->shouldIgnoreMissing(),
             new MigrationConfig(),
-            new MultipleFilesStrategy(new MigrationConfig(), $this->createMock(NameGeneratorInterface::class)),
+            new MultipleFilesStrategy(new MigrationConfig(), \Mockery::mock(NameGeneratorInterface::class)->shouldIgnoreMissing()),
         );
 
         $ref = new \ReflectionMethod($generator, 'generate');
 
-        $this->expectException(GeneratorException::class);
+        \Testo\Expect::exception(GeneratorException::class);
         $ref->invoke($generator, 'test', []);
     }
 }

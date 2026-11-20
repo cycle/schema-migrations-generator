@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
 
-class MigrationImageTest extends TestCase
+class MigrationImageTest
 {
     protected const DATABASE_DEFAULT = 'defaultDatabaseName';
 
@@ -35,12 +35,13 @@ class MigrationImageTest extends TestCase
         ];
     }
 
+    #[\Testo\Test]
     public function testRequires(): void
     {
         $class = $this->migrationImage->getClass();
         $constValue = $class->getConstant('DATABASE')->getValue();
-        $this->assertEquals(static::DATABASE_DEFAULT, $constValue, 'Check the DATABASE constant');
-        $this->assertNotEmpty($class->getName(), 'Class name is not empty');
+        \Testo\Assert::equals($constValue, static::DATABASE_DEFAULT, 'Check the DATABASE constant');
+        \Testo\Assert::false(empty($class->getName()), 'Class name is not empty');
 
         // check `up` and `down` methods
         $methods = $class->getMethods()->getIterator();
@@ -48,25 +49,22 @@ class MigrationImageTest extends TestCase
         foreach ($methods as $method) {
             $names[] = $method->getName();
         }
-        $this->assertContains('up', $names, 'Method up() exists');
-        $this->assertContains('down', $names, 'Method down() exists');
+        \Testo\Assert::contains($names, 'up', 'Method up() exists');
+        \Testo\Assert::contains($names, 'down', 'Method down() exists');
 
         $file = $this->migrationImage->getFile();
 
-        $this->assertTrue(
-            $file->getClasses()->has($class->getName()),
-            'The ClassDefinition exists in the FileDefinition',
-        );
+        \Testo\Assert::true($file->getClasses()->has($class->getName()), 'The ClassDefinition exists in the FileDefinition');
     }
 
+    #[\Testo\Test]
     public function testGetDatabase($database = self::DATABASE_DEFAULT): void
     {
-        $this->assertEquals($database, $this->migrationImage->getDatabase(), 'Test the database getter');
+        \Testo\Assert::equals($this->migrationImage->getDatabase(), $database, 'Test the database getter');
     }
 
-    /**
-     * @dataProvider databaseData
-     */
+    #[\Testo\Test]
+    #[\Testo\Data\DataProvider('databaseData')]
     public function testSetDatabase(mixed $database): void
     {
         $this->migrationImage->setDatabase($database);
@@ -74,44 +72,48 @@ class MigrationImageTest extends TestCase
         $this->testGetDatabase($database);
 
         $constValue = $this->migrationImage->getClass()->getConstant('DATABASE')->getValue();
-        $this->assertEquals($database, $constValue, 'DATABASE constant changed in the class declaration');
+        \Testo\Assert::equals($constValue, $database, 'DATABASE constant changed in the class declaration');
     }
 
+    #[\Testo\Test]
     public function testGetMigrationConfig(): void
     {
-        $this->assertEquals(static::$defaultMigrationConfig, $this->migrationImage->getMigrationConfig());
+        \Testo\Assert::equals($this->migrationImage->getMigrationConfig(), static::$defaultMigrationConfig);
     }
 
+    #[\Testo\Test]
     public function testGetClass(): void
     {
-        $this->assertInstanceOf(ClassDeclaration::class, $this->migrationImage->getClass());
+        \Testo\Assert::instanceOf($this->migrationImage->getClass(), ClassDeclaration::class);
     }
 
+    #[\Testo\Test]
     public function testGetFile(): void
     {
-        $this->assertInstanceOf(FileDeclaration::class, $this->migrationImage->getFile());
+        \Testo\Assert::instanceOf($this->migrationImage->getFile(), FileDeclaration::class);
     }
 
+    #[\Testo\Test]
     public function testBuildFileName(): void
     {
         $this->substringInFileName(static::DATABASE_DEFAULT, '{database}', 'Default database name in the filename');
 
         $this->migrationImage->fileNamePattern = '';
-        $this->assertEquals('', $this->migrationImage->buildFileName(), 'Empty pattern');
+        \Testo\Assert::equals($this->migrationImage->buildFileName(), '', 'Empty pattern');
     }
 
     /**
      * @param string $name Empty string by default because the migration name in the MigrationImage instance
      *                     is also empty string
      */
+    #[\Testo\Test]
     public function testGetName(string $name = ''): void
     {
-        $this->assertEquals($name, $this->migrationImage->getName(), 'Test the name getter');
+        \Testo\Assert::equals($this->migrationImage->getName(), $name, 'Test the name getter');
     }
 
-    /**
-     * @dataProvider migrationNameData
-     */
+    #[\Testo\Test]
+    #[\Testo\Data\DataProvider('migrationNameData')]
     public function testSetName(mixed $name): void
     {
         $this->migrationImage->setName($name);
@@ -123,14 +125,15 @@ class MigrationImageTest extends TestCase
         }
     }
 
+    #[\Testo\Lifecycle\BeforeClass]
     public static function setUpBeforeClass(): void
     {
         static::$defaultMigrationConfig = new MigrationConfig();
     }
 
+    #[\Testo\Lifecycle\BeforeTest]
     public function setUp(): void
     {
-        parent::setUp();
         $this->migrationImage = new MigrationImage(static::$defaultMigrationConfig, static::DATABASE_DEFAULT);
     }
 
@@ -140,6 +143,6 @@ class MigrationImageTest extends TestCase
             $this->migrationImage->fileNamePattern = $pattern;
         }
         $fileName = $this->migrationImage->buildFileName();
-        $this->assertStringContainsStringIgnoringCase($substr, $fileName, $message);
+        \Testo\Assert::string($fileName)->ignoringCase()->contains($substr, $message);
     }
 }

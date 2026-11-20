@@ -13,11 +13,12 @@ namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
 
 abstract class SingleFileStrategyTest extends BaseTest
 {
+    #[\Testo\Test]
     public function testInit(): void
     {
         $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -27,24 +28,26 @@ abstract class SingleFileStrategyTest extends BaseTest
         }
     }
 
+    #[\Testo\Test]
     public function testNoChanges(): void
     {
         $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
         $this->migrate(__DIR__ . '/Fixtures/Init');
-        $this->assertCount(2, $this->migrator->getMigrations());
+        \Testo\Assert::count($this->migrator->getMigrations(), 2);
     }
 
+    #[\Testo\Test]
     public function testAlter(): void
     {
         $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
 
-        $this->assertCount(2, $this->migrator->getMigrations());
+        \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
@@ -55,7 +58,7 @@ abstract class SingleFileStrategyTest extends BaseTest
 
         $tables = $this->migrate(__DIR__ . '/Fixtures/Alter');
 
-        $this->assertCount(4, $this->migrator->getMigrations());
+        \Testo\Assert::count($this->migrator->getMigrations(), 4);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }

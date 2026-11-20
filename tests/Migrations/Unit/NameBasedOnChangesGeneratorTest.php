@@ -14,41 +14,39 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator
  */
-final class NameBasedOnChangesGeneratorTest extends TestCase
+final class NameBasedOnChangesGeneratorTest
 {
     /**
      * @covers ::generate
      */
+    #[\Testo\Test]
     public function testGenerate(): void
     {
         $atomizer = new Atomizer(
-            $this->createMock(RendererInterface::class),
+            \Mockery::mock(RendererInterface::class)->shouldIgnoreMissing(),
         );
 
-        $create = $this->createMock(AbstractTable::class);
-        $create->method('getName')->willReturn('creates');
-        $create->method('getStatus')->willReturn(AbstractTable::STATUS_NEW);
+        $create = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $create->shouldReceive('getName')->andReturn('creates');
+        $create->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_NEW);
 
-        $drops = $this->createMock(AbstractTable::class);
-        $drops->method('getName')->willReturn('drops');
-        $drops->method('getStatus')->willReturn(AbstractTable::STATUS_DECLARED_DROPPED);
+        $drops = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $drops->shouldReceive('getName')->andReturn('drops');
+        $drops->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_DECLARED_DROPPED);
 
-        $renamesCmp = $this->createMock(ComparatorInterface::class);
-        $renamesCmp->method('isRenamed')->willReturn(true);
-        $renames = $this->createMock(AbstractTable::class);
-        $renames->method('getName')->willReturn('renames');
-        $renames->method('getStatus')->willReturn(AbstractTable::STATUS_EXISTS);
-        $renames->method('getComparator')->willReturn($renamesCmp);
-        $renames->method('getInitialName')->willReturn('old_name');
+        $renamesCmp = \Mockery::mock(ComparatorInterface::class)->shouldIgnoreMissing();
+        $renamesCmp->shouldReceive('isRenamed')->andReturn(true);
+        $renames = \Mockery::mock(AbstractTable::class)->shouldIgnoreMissing();
+        $renames->shouldReceive('getName')->andReturn('renames');
+        $renames->shouldReceive('getStatus')->andReturn(AbstractTable::STATUS_EXISTS);
+        $renames->shouldReceive('getComparator')->andReturn($renamesCmp);
+        $renames->shouldReceive('getInitialName')->andReturn('old_name');
 
         $atomizer
             ->addTable($create)
             ->addTable($drops)
             ->addTable($renames);
         $generator = new NameBasedOnChangesGenerator();
-        self::assertSame(
-            'create_creates_drop_drops_rename_old_name',
-            $generator->generate($atomizer),
-        );
+        \Testo\Assert::same($generator->generate($atomizer), 'create_creates_drop_drops_rename_old_name');
     }
 }
