@@ -9,17 +9,18 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests\Functional\Fixtures\Alter;
+namespace Cycle\Schema\Generator\Migrations\Tests\Fixtures\Alter;
 
 use Cycle\Annotated\Annotation\Column;
 use Cycle\Annotated\Annotation\Entity;
+use Cycle\Annotated\Annotation\Relation\BelongsTo;
 
-#[Entity(database: 'secondary')]
-class Other
+#[Entity]
+class Post
 {
     #[Column(type: 'primary')]
     protected int $id;
 
-    #[Column(type: 'enum(active,disabled,pending)', default: 'active')]
-    protected string $status;
+    #[BelongsTo(target: Other::class, nullable: false)]
+    protected Other $other;
 }

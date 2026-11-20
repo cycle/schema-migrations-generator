@@ -9,14 +9,17 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests\Functional;
+namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 
-abstract class SingleFileStrategyTest extends BaseTest
+use Cycle\Schema\Generator\Migrations\Tests\GeneratorTestCase;
+use Cycle\Testing\Database\Assert\SchemaAssert;
+
+final class SingleFileStrategyTest extends GeneratorTestCase
 {
     #[\Testo\Test]
     public function testInit(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $tables = $this->migrate(self::FIXTURES . 'Init');
 
         \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
@@ -24,28 +27,28 @@ abstract class SingleFileStrategyTest extends BaseTest
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
     }
 
     #[\Testo\Test]
     public function testNoChanges(): void
     {
-        $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(self::FIXTURES . 'Init');
 
         \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
             $this->migrator->run();
         }
 
-        $this->migrate(__DIR__ . '/Fixtures/Init');
+        $this->migrate(self::FIXTURES . 'Init');
         \Testo\Assert::count($this->migrator->getMigrations(), 2);
     }
 
     #[\Testo\Test]
     public function testAlter(): void
     {
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Init');
+        $tables = $this->migrate(self::FIXTURES . 'Init');
 
         \Testo\Assert::count($this->migrator->getMigrations(), 2);
         foreach ($this->migrator->getMigrations() as $m) {
@@ -53,10 +56,10 @@ abstract class SingleFileStrategyTest extends BaseTest
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
 
-        $tables = $this->migrate(__DIR__ . '/Fixtures/Alter');
+        $tables = $this->migrate(self::FIXTURES . 'Alter');
 
         \Testo\Assert::count($this->migrator->getMigrations(), 4);
         foreach ($this->migrator->getMigrations() as $m) {
@@ -64,7 +67,7 @@ abstract class SingleFileStrategyTest extends BaseTest
         }
 
         foreach ($tables as $t) {
-            $this->assertSameAsInDB($t);
+            SchemaAssert::sameAsInDb($t);
         }
     }
 }

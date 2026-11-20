@@ -10,7 +10,6 @@ use Cycle\Schema\Generator\Migrations\Exception\GeneratorException;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameGeneratorInterface;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
-use PHPUnit\Framework\TestCase;
 
 final class GenerateMigrationsTest
 {

@@ -9,7 +9,6 @@ use Cycle\Database\Schema\ComparatorInterface;
 use Cycle\Migrations\Atomizer\Atomizer;
 use Cycle\Migrations\Atomizer\RendererInterface;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator

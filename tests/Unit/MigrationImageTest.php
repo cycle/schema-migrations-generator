@@ -6,7 +6,6 @@ namespace Cycle\Schema\Generator\Migrations\Tests\Unit;
 
 use Cycle\Migrations\Config\MigrationConfig;
 use Cycle\Schema\Generator\Migrations\MigrationImage;
-use PHPUnit\Framework\TestCase;
 use Spiral\Reactor\ClassDeclaration;
 use Spiral\Reactor\FileDeclaration;
 

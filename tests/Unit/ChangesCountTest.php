@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Unit;
 
-use Cycle\Database\Schema\AbstractColumn;
+use Cycle\Database\Driver\SQLite\Schema\SQLiteColumn;
 use Cycle\Database\Schema\AbstractForeignKey;
 use Cycle\Database\Schema\AbstractIndex;
 use Cycle\Database\Schema\AbstractTable;
@@ -12,7 +12,6 @@ use Cycle\Database\Schema\ComparatorInterface;
 use Cycle\Migrations\Atomizer\Atomizer;
 use Cycle\Migrations\Atomizer\RendererInterface;
 use Cycle\Schema\Generator\Migrations\ChangesCountNameGenerator;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Cycle\Schema\Generator\Migrations\ChangesCountNameGenerator
@@ -49,16 +48,13 @@ final class ChangesCountTest
         $changeCmp = \Mockery::mock(ComparatorInterface::class)->shouldIgnoreMissing();
         $changeCmp->shouldReceive('isRenamed')->andReturn(false);
         //// Column
-        $columnAdd = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
-        $columnAdd->shouldReceive('getName')->andReturn('c1');
-        $columnDrop = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
-        $columnDrop->shouldReceive('getName')->andReturn('c2');
-        $columnAlter = \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing();
-        $columnAlter->shouldReceive('getName')->andReturn('c3');
+        $columnAdd = new SQLiteColumn('table', 'c1');
+        $columnDrop = new SQLiteColumn('table', 'c2');
+        $columnAlter = new SQLiteColumn('table', 'c3');
         $changeCmp->shouldReceive('addedColumns')->andReturn([$columnAdd]);
         $changeCmp->shouldReceive('droppedColumns')->andReturn([$columnDrop]);
         $changeCmp->shouldReceive('alteredColumns')->andReturn([
-            [$columnAlter, \Mockery::mock(AbstractColumn::class)->shouldIgnoreMissing()],
+            [$columnAlter, new SQLiteColumn('table', 'altered')],
         ]);
         //// Index
         $indexAdd = \Mockery::mock(AbstractIndex::class)->shouldIgnoreMissing();
