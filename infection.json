@@ -6,10 +6,22 @@
         ]
     },
     "timeout": 10,
-    "minMsi": 78,
-    "minCoveredMsi": 78,
+    "minMsi": 98,
+    "minCoveredMsi": 98,
     "testFramework": "testo",
     "tmpDir": "runtime",
+    "mutators": {
+        "@default": true,
+        "Concat": {
+            "ignore": ["Cycle\\Schema\\Generator\\Migrations\\MigrationImage::setDatabase"]
+        },
+        "ConcatOperandRemoval": {
+            "ignore": ["Cycle\\Schema\\Generator\\Migrations\\MigrationImage::setDatabase"]
+        },
+        "FalseValue": {
+            "ignore": ["Cycle\\Schema\\Generator\\Migrations\\MigrationImage::setDatabase"]
+        }
+    },
     "logs": {
         "stryker": {
             "report": "2.x"
