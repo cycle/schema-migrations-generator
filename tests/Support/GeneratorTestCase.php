@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cycle\Schema\Generator\Migrations\Tests;
+namespace Cycle\Schema\Generator\Migrations\Tests\Support;
 
 use Cycle\Annotated\Entities;
 use Cycle\Annotated\Locator\TokenizerEntityLocator;
@@ -35,8 +35,8 @@ use Testo\Lifecycle\BeforeTest;
  */
 abstract class GeneratorTestCase extends DatabaseTestCase
 {
-    protected const FILES = __DIR__ . '/files/';
-    protected const FIXTURES = __DIR__ . '/Fixtures/';
+    protected const FILES = __DIR__ . '/../files/';
+    protected const FIXTURES = __DIR__ . '/../Fixtures/';
 
     protected Migrator $migrator;
     private string $directory;

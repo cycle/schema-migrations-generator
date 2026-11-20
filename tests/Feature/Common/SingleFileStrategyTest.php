@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 
-use Cycle\Schema\Generator\Migrations\Tests\GeneratorTestCase;
+use Cycle\Schema\Generator\Migrations\Tests\Support\GeneratorTestCase;
 use Cycle\Testing\Database\Assert\SchemaAssert;
 use Testo\Assert;
 use Testo\Test;

@@ -14,7 +14,7 @@ namespace Cycle\Schema\Generator\Migrations\Tests\Feature\Common;
 use Cycle\Schema\Generator\Migrations\GenerateMigrations;
 use Cycle\Schema\Generator\Migrations\NameBasedOnChangesGenerator;
 use Cycle\Schema\Generator\Migrations\Strategy\MultipleFilesStrategy;
-use Cycle\Schema\Generator\Migrations\Tests\GeneratorTestCase;
+use Cycle\Schema\Generator\Migrations\Tests\Support\GeneratorTestCase;
 use Cycle\Testing\Database\Assert\SchemaAssert;
 use Testo\Assert;
 use Testo\Test;
