@@ -26,7 +26,7 @@
         "buggregator/trap": "^1.20",
         "cycle/annotated": "^4.6",
         "cycle/orm": "^2.18",
-        "cycle/testing": "^0.1",
+        "cycle/testing": "^0.1.1",
         "llm/skills": "^1.20",
         "mockery/mockery": "^1.6",
         "roxblnfk/unpoly": "^1.8",
