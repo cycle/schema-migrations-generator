@@ -92,6 +92,13 @@ final class MigrationImageTest
         Assert::instanceOf($this->migrationImage->getFile(), FileDeclaration::class);
     }
 
+    public function importsTheMigrationBaseClass(): void
+    {
+        $code = (string) $this->migrationImage->getFile();
+
+        Assert::string($code)->contains('use Cycle\Migrations\Migration;')->contains('extends Migration');
+    }
+
     public function testBuildFileName(): void
     {
         $this->substringInFileName(self::DATABASE_DEFAULT, '{database}', 'Default database name in the filename');
