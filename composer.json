@@ -17,16 +17,16 @@
     ],
     "require": {
         "php": ">=8.2",
-        "cycle/database": "^2.23",
-        "cycle/schema-builder": "^2.12",
-        "cycle/migrations": "^4.3"
+        "cycle/database": "^2.24",
+        "cycle/schema-builder": "^2.13",
+        "cycle/migrations": "^4.4"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
         "buggregator/trap": "^1.20",
-        "cycle/annotated": "^4.6",
-        "cycle/orm": "^2.18",
-        "cycle/testing": "^0.1.1",
+        "cycle/annotated": "^4.7",
+        "cycle/orm": "^2.19",
+        "cycle/testing": "^0.1.2",
         "llm/skills": "^1.20",
         "mockery/mockery": "^1.6",
         "roxblnfk/unpoly": "^1.8",
